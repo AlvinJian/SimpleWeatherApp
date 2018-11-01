@@ -47,7 +47,7 @@ namespace WeatherApp
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                    template: "{controller=OWMReq}/{action=Index}/{param?}");
             });
 
             app.UseSpa(spa =>

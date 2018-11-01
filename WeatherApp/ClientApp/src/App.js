@@ -7,7 +7,7 @@ export default class App extends Component {
         super(props);
         this.state = {
             paramType: OWMInputTypes.GeoLocation,
-            param: ""
+            paramVal: ""
         };
 
         this.getLocation = this.getLocation.bind(this);
@@ -19,7 +19,7 @@ export default class App extends Component {
             navigator.geolocation.getCurrentPosition((position) => {
                 const lat = position.coords.latitude.toFixed(2);
                 const lon = position.coords.longitude.toFixed(2);
-                    this.setState({ param: "" + lat + "," + lon })
+                this.setState({ paramVal: "" + lat + "," + lon })
             });
         } else {
             console.log("Geolocation is not supported by this browser.");
@@ -31,8 +31,8 @@ export default class App extends Component {
             <div>
                 <h1>Simple Weather App</h1>
                 <CurrentWeather
-                    type={this.state.paramType}
-                    param={this.state.param} />
+                    paramType={this.state.paramType}
+                    paramVal={this.state.paramVal} />
             </div>
         );
     }
