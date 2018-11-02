@@ -11,6 +11,8 @@ export default class App extends Component {
         };
 
         this.getLocation = this.getLocation.bind(this);
+        this.getCurrentWeather = this.getCurrentWeather.bind(this);
+
         this.getLocation();
     }
 
@@ -26,7 +28,27 @@ export default class App extends Component {
         }
     }
 
+    getCurrentWeather() {
+        var call = 'api/OWMReq/';
+        if (this.state.paramType === OWMInputTypes.GeoLocation) {
+            call += ('WeatherByGeo/' + this.state.paramVal);
+        }
+        else {
+            console.log("parameter type: " + this.state.paramType +
+                " is not supported");
+        }
+        console.log("call: " + call);
+        if (call.length > 0) {
+            fetch(call).then(response => response.json())
+                .then(data => { console.log(JSON.stringify(data)); })
+        }
+    }
+
     render() {
+        if (this.state.paramVal.length > 1) {
+            this.getCurrentWeather();
+        }
+
         return (
             <div>
                 <h1>Simple Weather App</h1>
