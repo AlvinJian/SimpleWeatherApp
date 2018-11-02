@@ -7,7 +7,8 @@ export default class App extends Component {
         super(props);
         this.state = {
             paramType: OWMInputTypes.GeoLocation,
-            paramVal: ""
+            paramVal: "",
+            weatherData: {}
         };
 
         this.getLocation = this.getLocation.bind(this);
@@ -21,7 +22,11 @@ export default class App extends Component {
             navigator.geolocation.getCurrentPosition((position) => {
                 const lat = position.coords.latitude.toFixed(2);
                 const lon = position.coords.longitude.toFixed(2);
-                this.setState({ paramVal: "" + lat + "," + lon })
+                this.setState({
+                    paramType: this.state.paramType,
+                    paramVal: "" + lat + "," + lon,
+                    weatherData: {}
+                })
             });
         } else {
             console.log("Geolocation is not supported by this browser.");
@@ -40,7 +45,14 @@ export default class App extends Component {
         console.log("call: " + call);
         if (call.length > 0) {
             fetch(call).then(response => response.json())
-                .then(data => { console.log(JSON.stringify(data)); })
+                .then(data => {
+                    console.log(JSON.stringify(data));
+                    this.setState({
+                        paramType: this.state.paramType,
+                        paramVal: this.state.paramVal,
+                        weatherData: data
+                    });
+                })
         }
     }
 
@@ -51,10 +63,11 @@ export default class App extends Component {
 
         return (
             <div>
-                <h1>Simple Weather App</h1>
+                <h3>Simple Weather App</h3>
                 <CurrentWeather
                     paramType={this.state.paramType}
-                    paramVal={this.state.paramVal} />
+                    paramVal={this.state.paramVal}
+                    weatherData={this.state.weatherData} />
             </div>
         );
     }
