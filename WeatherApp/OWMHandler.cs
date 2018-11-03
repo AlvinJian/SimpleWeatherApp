@@ -3,8 +3,9 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Net;
 using System.IO;
+using Weather;
 
-namespace OWM
+namespace WeatherApp
 {
     public class OWMHandler
     {

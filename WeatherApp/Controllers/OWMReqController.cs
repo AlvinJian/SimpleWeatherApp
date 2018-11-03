@@ -11,11 +11,11 @@ namespace WeatherApp.Controllers
     public class OWMReqController : Controller
     {
         [Route("WeatherByGeo/{param}")]
-        public WeatherData GetWeatherByGeo(string param)
+        public AppFront.WeatherData GetWeatherByGeo(string param)
         {
             System.Diagnostics.Debug.WriteLine("param=" + param);
-            OWM.OWMHandler handler = new OWM.OWMHandler();
-            WeatherData data = new WeatherData();
+            OWMHandler handler = new OWMHandler();
+            AppFront.WeatherData data = new AppFront.WeatherData();
             string[] strs = param.Split(',');
             if (strs.Length < 2)
             {
