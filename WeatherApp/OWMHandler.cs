@@ -18,7 +18,7 @@ namespace WeatherApp
             Unit = "imperial";
         }
 
-        public OWMWeather GetResponse(String lat, String lon)
+        public OWMWeather GetWeather(String lat, String lon)
         {
             if (!IsFloatOrInt(lat) || !IsFloatOrInt(lon)) return null;
             StringBuilder builder = new StringBuilder(END_POINT);

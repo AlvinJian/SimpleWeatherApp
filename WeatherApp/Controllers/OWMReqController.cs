@@ -19,15 +19,15 @@ namespace WeatherApp.Controllers
             string[] strs = param.Split(',');
             if (strs.Length < 2)
             {
-                data.Code = "BAD";
+                data.Code = AppFront.ReturnCode.BAD;
                 return data;
             }
             string lat = strs[0].Trim();
             string lon = strs[1].Trim();
-            var resp = handler.GetResponse(lat, lon);
+            var resp = handler.GetWeather(lat, lon);
             if (resp == null)
             {
-                data.Code = "BAD";
+                data.Code = AppFront.ReturnCode.BAD;
                 return data;
             }
             data.City = resp.Name;
@@ -36,7 +36,7 @@ namespace WeatherApp.Controllers
             data.Temperature = resp.Main.Temp;
             data.Weather = resp.Weather[0].Main;
             System.Diagnostics.Debug.WriteLine("weather=" + data.Weather);
-            data.Code = "GOOD";
+            data.Code = AppFront.ReturnCode.GOOD;
             return data;
         }
     }

@@ -1,7 +1,15 @@
-﻿using System;
+﻿/**
+ * the data structure passed to the front-end.
+ */
 
 namespace AppFront
 {
+    public static class ReturnCode
+    {
+        public const string BAD = "BAD";
+        public const string GOOD = "GOOD";
+    }
+
     public class WeatherData
     {
         public string City { get; set; }
