@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { CurrentWeather } from './components/CurrentWeather';
+import { Forecast } from './components/Forecast';
 import { OWMInputTypes } from './Config';
 
 export default class App extends Component {
@@ -38,6 +39,9 @@ export default class App extends Component {
             <div>
                 <h3>Simple Weather App</h3>
                 <CurrentWeather
+                    paramType={this.state.paramType}
+                    paramVal={this.state.paramVal} />
+                <Forecast
                     paramType={this.state.paramType}
                     paramVal={this.state.paramVal} />
             </div>

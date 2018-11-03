@@ -81,7 +81,7 @@ namespace WeatherApp.Controllers
                     d.Weather = forecast.Weather[0].Main;
                     d.Pressure = forecast.Main.Pressure;
                     d.TimeStamp = forecast.DtTxt;
-                    list.Append(d);
+                    list.AddLast(d);
                     lastDay = forecast.DtTxt.Day;
                 }
             }

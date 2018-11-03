@@ -1,19 +1,19 @@
 ﻿import React, { Component } from 'react';
 import { OWMInputTypes } from '../Config';
 
-export class CurrentWeather extends Component {
+export class Forecast extends Component {
     constructor(props) {
         super(props);
         this.state = {
             weatherData: {}
         };
-        this.getCurrentWeather = this.getCurrentWeather.bind(this);
+        this.getForecast = this.getForecast.bind(this);
     }
 
-    getCurrentWeather() {
+    getForecast() {
         var call = 'api/OWMReq/';
         if (this.props.paramType === OWMInputTypes.GeoLocation) {
-            call += ('WeatherByGeo/' + this.props.paramVal);
+            call += ('ForecastByGeo/' + this.props.paramVal);
         }
         else {
             console.log("parameter type: " + this.props.paramType +
@@ -33,25 +33,18 @@ export class CurrentWeather extends Component {
     }
 
     render() {
-        console.log("CurWeather render");
+        console.log("Forecast render");
         if (this.state.weatherData.code &&
             this.state.weatherData.code === 'GOOD') {
-            console.log("CurWeather is rendering")
+            console.log("Forecast is rendering")
             return (
                 <div>
-                    <h1>
-                        {this.state.weatherData.city},
-                        {this.state.weatherData.country}
-                    </h1>
-                    <h2> {this.state.weatherData.weather} </h2>
-                    <h2> {this.state.weatherData.temperature}F</h2>
-                    <h4> Max {this.state.weatherData.temperatureMax}F / Min {this.state.weatherData.temperatureMin}F </h4>
-                    <h2> Humidity: {this.state.weatherData.humidity} % </h2>
+                    <h2> {this.state.weatherData.forecasts.length} days forecasts </h2>
                 </div>
             );
         }
         else {
-            this.getCurrentWeather();
+            this.getForecast();
             return (
                 <div>
                     <h2> No data yet :( </h2>
