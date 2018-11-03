@@ -34,6 +34,12 @@ namespace OWM
         [JsonProperty("clouds")]
         public Clouds Clouds { get; set; }
 
+        [JsonProperty("rain")]
+        public Rain Rain { get; set; }
+
+        [JsonProperty("snow")]
+        public Snow Snow { get; set; }
+
         [JsonProperty("dt")]
         public long Dt { get; set; }
 
@@ -54,6 +60,30 @@ namespace OWM
     {
         [JsonProperty("all")]
         public long All { get; set; }
+    }
+
+    public partial class Rain
+    {
+        [JsonProperty("1h", NullValueHandling = NullValueHandling.Ignore)]
+        public double? OneHour { get; set; }
+
+        [JsonProperty("2h", NullValueHandling = NullValueHandling.Ignore)]
+        public double? TwoHour { get; set; }
+
+        [JsonProperty("3h", NullValueHandling = NullValueHandling.Ignore)]
+        public double? ThreeHour { get; set; }
+    }
+
+    public partial class Snow
+    {
+        [JsonProperty("1h", NullValueHandling = NullValueHandling.Ignore)]
+        public double? OneHour { get; set; }
+
+        [JsonProperty("2h", NullValueHandling = NullValueHandling.Ignore)]
+        public double? TwoHour { get; set; }
+
+        [JsonProperty("3h", NullValueHandling = NullValueHandling.Ignore)]
+        public double? ThreeHour { get; set; }
     }
 
     public partial class Coord
