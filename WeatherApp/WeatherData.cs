@@ -10,16 +10,38 @@ namespace AppFront
         public const string GOOD = "GOOD";
     }
 
-    public class WeatherData
+    public struct WeatherData
     {
         public string City { get; set; }
         public string Country { get; set; }
-        public double Lat { get; set; }
-        public double Lon { get; set; }
         public double Temperature { get; set; }
+        public double TemperatureMin { get; set; }
+        public double TemperatureMax { get; set; }
+        public double Pressure { get; set; }
         public double Humidity { get; set; }
         public string Weather { get; set; }
 
         public string Code { get; set; }
+    }
+
+    public struct ForecastData
+    {
+        public string Code { get; set; }
+
+        public string City { get; set; }
+        public string Country { get; set; }
+
+        public Data[] Forecasts { get; set; }
+
+        public struct Data
+        {
+            public double Temperature { get; set; }
+            public double TemperatureMin { get; set; }
+            public double TemperatureMax { get; set; }
+            public double Humidity { get; set; }
+            public string Weather { get; set; }
+            public double Pressure { get; set; }
+            public System.DateTimeOffset TimeStamp { get; set; }
+        }
     }
 }

@@ -98,7 +98,7 @@ namespace Weather
         public double Temp { get; set; }
 
         [JsonProperty("pressure")]
-        public long Pressure { get; set; }
+        public double Pressure { get; set; }
 
         [JsonProperty("humidity")]
         public long Humidity { get; set; }
