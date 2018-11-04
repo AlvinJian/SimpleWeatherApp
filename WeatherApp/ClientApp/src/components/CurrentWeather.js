@@ -1,5 +1,7 @@
 ﻿import React, { Component } from 'react';
-import { OWMInputTypes } from '../Config';
+import { Jumbotron } from 'react-bootstrap'
+import { OWMInputTypes, Symbol } from '../Config';
+import { curWeather } from './CurrentWeather.css'
 
 export class CurrentWeather extends Component {
     constructor(props) {
@@ -38,24 +40,30 @@ export class CurrentWeather extends Component {
             this.state.weatherData.code === 'GOOD') {
             console.log("CurWeather is rendering")
             return (
-                <div>
-                    <h1>
+                <Jumbotron>
+                    <h1 className="curWeather">
                         {this.state.weatherData.city},
-                        {this.state.weatherData.country}
+                        {this.state.weatherData.country} <br/>
+                        {this.state.weatherData.weather}
                     </h1>
-                    <h2> {this.state.weatherData.weather} </h2>
-                    <h2> {this.state.weatherData.temperature}F</h2>
-                    <h4> Max {this.state.weatherData.temperatureMax}F / Min {this.state.weatherData.temperatureMin}F </h4>
-                    <h2> Humidity: {this.state.weatherData.humidity} % </h2>
-                </div>
+                    <p className="curWeather">
+                        {this.state.weatherData.temperature + Symbol.DegF}<br />
+                        Min {this.state.weatherData.temperatureMin + Symbol.DegF } /
+                        Max {this.state.weatherData.temperatureMax + Symbol.DegF} <br />
+                        Humidity: {this.state.weatherData.humidity + Symbol.Percent}</p>
+                </Jumbotron>
             );
         }
         else {
             this.getCurrentWeather();
+            const noDataStyle = {
+                fontSize: 'xx-large',
+                textAlign: 'center'
+            };
             return (
-                <div>
-                    <h2> No data yet :( </h2>
-                </div>
+                <Jumbotron>
+                    <h1 style={noDataStyle}> No data yet :( </h1>
+                </Jumbotron>
             );
         }
     }

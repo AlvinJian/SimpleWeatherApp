@@ -46,9 +46,7 @@ export class Forecast extends Component {
         else {
             this.getForecast();
             return (
-                <div>
-                    <h2> No data yet :( </h2>
-                </div>
+                <div/>
             );
         }
     }

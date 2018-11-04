@@ -1,0 +1,14 @@
+﻿p.curWeather {
+    text-align: right;
+    font-size: medium
+}
+
+h1.curWeather {
+    text-align: left;
+    font-size: xx-large
+}
+
+h2.curWeather {
+    text-align: left;
+    font-size: x-large
+}

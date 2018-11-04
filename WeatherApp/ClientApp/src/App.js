@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Col, Grid, Row, Label } from 'react-bootstrap'
 import { CurrentWeather } from './components/CurrentWeather';
 import { Forecast } from './components/Forecast';
 import { OWMInputTypes } from './Config';
@@ -37,13 +38,23 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                <h3>Simple Weather App</h3>
-                <CurrentWeather
-                    paramType={this.state.paramType}
-                    paramVal={this.state.paramVal} />
-                <Forecast
-                    paramType={this.state.paramType}
-                    paramVal={this.state.paramVal} />
+                <Label>Simple Weather App</Label>
+                <Grid fluid>
+                    <Row>
+                        <Col md={4} />
+                        <Col md={4}>
+                            <CurrentWeather
+                                paramType={this.state.paramType}
+                                paramVal={this.state.paramVal} />
+                        </Col>
+                        <Col md={4} />
+                    </Row>
+                    <Row>
+                        <Forecast
+                            paramType={this.state.paramType}
+                            paramVal={this.state.paramVal} />
+                    </Row>
+                </Grid>
             </div>
         );
     }
