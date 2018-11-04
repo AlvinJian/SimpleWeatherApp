@@ -38,7 +38,9 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                <Label>Simple Weather App</Label>
+                <Label>
+                    Powered by OpenWeatherMap
+                </Label>
                 <Grid fluid>
                     <Row>
                         <Col md={4} />

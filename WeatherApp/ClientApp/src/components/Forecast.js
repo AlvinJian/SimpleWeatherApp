@@ -1,5 +1,7 @@
 ﻿import React, { Component } from 'react';
-import { OWMInputTypes } from '../Config';
+import { Col, Grid, Row } from 'react-bootstrap';
+import { OWMInputTypes, Symbol } from '../Config';
+import './Forecast.css'
 
 export class Forecast extends Component {
     constructor(props) {
@@ -8,6 +10,7 @@ export class Forecast extends Component {
             weatherData: {}
         };
         this.getForecast = this.getForecast.bind(this);
+        this.drawRaw = this.drawForecast.bind(this);
     }
 
     getForecast() {
@@ -32,15 +35,50 @@ export class Forecast extends Component {
         }
     }
 
+    drawForecast(forecast) {
+        return (
+            <div>
+                <h1 className="forecast">
+                    {forecast.date} <br/>
+                    {forecast.weather}
+                </h1>
+                <p className="forecast">
+                    {forecast.temperature + Symbol.DegF}<br/>
+                    Humidity {forecast.humidity + Symbol.Percent}
+                </p>
+            </div>
+        );
+    }
+
     render() {
         console.log("Forecast render");
         if (this.state.weatherData.code &&
             this.state.weatherData.code === 'GOOD') {
             console.log("Forecast is rendering")
             return (
-                <div>
-                    <h2> {this.state.weatherData.forecasts.length} days forecasts </h2>
-                </div>
+                <Grid>
+                    <Row className="show-grid">
+                        <div>
+                        <Col md={1}> <br/> </Col>
+                        <Col md={2}>
+                            {this.drawForecast(this.state.weatherData.forecasts[0])}
+                        </Col>
+                        <Col md={2}>
+                            {this.drawForecast(this.state.weatherData.forecasts[1])}
+                        </Col>
+                        <Col md={2}>
+                            {this.drawForecast(this.state.weatherData.forecasts[2])}
+                        </Col>
+                        <Col md={2}>
+                            {this.drawForecast(this.state.weatherData.forecasts[3])}
+                        </Col>
+                        <Col md={2}>
+                            {this.drawForecast(this.state.weatherData.forecasts[4])}
+                        </Col>
+                            <Col md={1}> <br/> </Col>
+                            </div>
+                    </Row>
+                </Grid>
             );
         }
         else {

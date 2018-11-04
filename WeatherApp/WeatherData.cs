@@ -41,7 +41,7 @@ namespace AppFront
             public double Humidity { get; set; }
             public string Weather { get; set; }
             public double Pressure { get; set; }
-            public System.DateTimeOffset TimeStamp { get; set; }
+            public string Date { get; set; }
         }
     }
 }

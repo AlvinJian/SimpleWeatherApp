@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Jumbotron } from 'react-bootstrap'
 import { OWMInputTypes, Symbol } from '../Config';
-import { curWeather } from './CurrentWeather.css'
+import './CurrentWeather.css'
 
 export class CurrentWeather extends Component {
     constructor(props) {
@@ -42,15 +42,15 @@ export class CurrentWeather extends Component {
             return (
                 <Jumbotron>
                     <h1 className="curWeather">
-                        {this.state.weatherData.city},
+                        {this.state.weatherData.city+", "}
                         {this.state.weatherData.country} <br/>
                         {this.state.weatherData.weather}
                     </h1>
                     <p className="curWeather">
                         {this.state.weatherData.temperature + Symbol.DegF}<br />
-                        Min {this.state.weatherData.temperatureMin + Symbol.DegF } /
+                        Min {this.state.weatherData.temperatureMin + Symbol.DegF } |
                         Max {this.state.weatherData.temperatureMax + Symbol.DegF} <br />
-                        Humidity: {this.state.weatherData.humidity + Symbol.Percent}</p>
+                        Humidity {this.state.weatherData.humidity + Symbol.Percent}</p>
                 </Jumbotron>
             );
         }

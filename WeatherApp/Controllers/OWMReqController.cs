@@ -75,12 +75,13 @@ namespace WeatherApp.Controllers
                 {
                     AppFront.ForecastData.Data d = new AppFront.ForecastData.Data();
                     d.Temperature = forecast.Main.Temp;
-                    d.TemperatureMin = forecast.Main.TempMax;
+                    d.TemperatureMax = forecast.Main.TempMax;
                     d.TemperatureMin = forecast.Main.TempMin;
                     d.Humidity = forecast.Main.Humidity;
                     d.Weather = forecast.Weather[0].Main;
                     d.Pressure = forecast.Main.Pressure;
-                    d.TimeStamp = forecast.DtTxt;
+                    //d.Date = string.Format("{0}-{1}", forecast.DtTxt.Month, forecast.DtTxt.Day);
+                    d.Date = forecast.DtTxt.Date.ToString("MMM. dd");
                     list.AddLast(d);
                     lastDay = forecast.DtTxt.Day;
                 }
