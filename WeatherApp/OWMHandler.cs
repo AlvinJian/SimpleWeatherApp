@@ -37,12 +37,44 @@ namespace WeatherApp
             return JsonConvert.DeserializeObject<OWMWeather>(apiResponse);
         }
 
+        public OWMWeather GetWeather(long id)
+        {
+            StringBuilder builder = new StringBuilder(END_POINT);
+            builder.Append("weather");
+            builder.AppendFormat("?id={0}&appid={1}&units={2}", id, API_KEY, Unit);
+            HttpWebRequest apiRequest = WebRequest.Create(builder.ToString()) as HttpWebRequest;
+            string apiResponse = "";
+            using (HttpWebResponse response = apiRequest.GetResponse() as HttpWebResponse)
+            {
+                var reader = new StreamReader(response.GetResponseStream());
+                apiResponse = reader.ReadToEnd();
+            }
+
+            return JsonConvert.DeserializeObject<OWMWeather>(apiResponse);
+        }
+
         public OWMForcast GetForcast(String lat, String lon)
         {
             if (!IsFloatOrInt(lat) || !IsFloatOrInt(lon)) return null;
             StringBuilder builder = new StringBuilder(END_POINT);
             builder.Append("forecast");
             builder.Append(String.Format("?lat={0}&lon={1}&appid={2}&units={3}", lat, lon, API_KEY, Unit));
+            HttpWebRequest apiRequest = WebRequest.Create(builder.ToString()) as HttpWebRequest;
+
+            string apiResponse = "";
+            using (HttpWebResponse response = apiRequest.GetResponse() as HttpWebResponse)
+            {
+                var reader = new StreamReader(response.GetResponseStream());
+                apiResponse = reader.ReadToEnd();
+            }
+            return JsonConvert.DeserializeObject<OWMForcast>(apiResponse);
+        }
+
+        public OWMForcast GetForcast(long id)
+        {
+            StringBuilder builder = new StringBuilder(END_POINT);
+            builder.Append("forecast");
+            builder.AppendFormat("?id={0}&appid={1}&units={2}", id, API_KEY, Unit);
             HttpWebRequest apiRequest = WebRequest.Create(builder.ToString()) as HttpWebRequest;
 
             string apiResponse = "";

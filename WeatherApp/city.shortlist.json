@@ -1,0 +1,56 @@
+[
+  {
+    "id": 5128638,
+    "name": "New York",
+    "country": "US",
+    "coord": {
+      "lon": -75.499901,
+      "lat": 43.000351
+    }
+  },
+  {
+    "id": 5809844,
+    "name": "Seattle",
+    "country": "US",
+    "coord": {
+      "lon": -122.332069,
+      "lat": 47.606209
+    }
+  },
+  {
+    "id": 1796236,
+    "name": "Shanghai",
+    "country": "CN",
+    "coord": {
+      "lon": 121.458061,
+      "lat": 31.222219
+    }
+  },
+  {
+    "id": 1850147,
+    "name": "Tokyo",
+    "country": "JP",
+    "coord": {
+      "lon": 139.691711,
+      "lat": 35.689499
+    }
+  },
+  {
+    "id": 1835848,
+    "name": "Seoul",
+    "country": "KR",
+    "coord": {
+      "lon": 126.977829,
+      "lat": 37.56826
+    }
+  },
+  {
+    "id": 2867714,
+    "name": "Muenchen",
+    "country": "DE",
+    "coord": {
+      "lon": 11.57549,
+      "lat": 48.137428
+    }
+  }
+]

@@ -1,6 +1,6 @@
 ﻿export const OWMInputTypes = {
     GeoLocation: 'geo',
-    CityName: 'city'
+    CityId: 'cityId'
 };
 
 export const Symbol = {

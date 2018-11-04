@@ -11,10 +11,22 @@ export default class App extends Component {
             paramType: OWMInputTypes.GeoLocation,
             paramVal: "",
         };
+        this.cityList = [];
 
         this.getLocation = this.getLocation.bind(this);
 
-        this.getLocation();
+        // this.getLocation();
+
+        fetch('api/CityInfo/AllList/')
+            .then(response => response.json())
+            .then(data => {
+                console.log(JSON.stringify(data));
+                this.cityList = data.list;
+                this.setState({
+                    paramType: OWMInputTypes.CityId,
+                    paramVal: this.cityList[0].id
+                });
+            });
     }
 
     getLocation() {

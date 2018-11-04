@@ -18,12 +18,15 @@ export class Forecast extends Component {
         if (this.props.paramType === OWMInputTypes.GeoLocation) {
             call += ('ForecastByGeo/' + this.props.paramVal);
         }
+        else if (this.props.paramType === OWMInputTypes.CityId) {
+            call += ('ForecastById/' + this.props.paramVal);
+        }
         else {
             console.log("parameter type: " + this.props.paramType +
                 " is not supported");
         }
-        console.log("call: " + call);
-        if (this.props.paramVal.length > 1) {
+        if ((this.props.paramType === OWMInputTypes.CityId && this.props.paramVal > 0) ||
+            (this.props.paramType === OWMInputTypes.GeoLocation && this.props.paramVal.length > 1)) {
             fetch(call).then(response => response.json())
                 .then(data => {
                     console.log(JSON.stringify(data));
