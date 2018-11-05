@@ -48,7 +48,7 @@ export class CurrentWeather extends Component {
             };
             return (
                 <Jumbotron>
-                    <h1 style={noDataStyle}> No data yet :( </h1>
+                    <h1 style={noDataStyle}> Loading... </h1>
                 </Jumbotron>
             );
         }
