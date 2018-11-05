@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Jumbotron } from 'react-bootstrap'
-import { OWMInputTypes, Symbol } from '../Config';
+import { Symbol } from '../Config';
 import './CurrentWeather.css'
 
 export class CurrentWeather extends Component {
@@ -9,46 +9,20 @@ export class CurrentWeather extends Component {
         this.state = {
             weatherData: {}
         };
-        this.getCurrentWeather = this.getCurrentWeather.bind(this);
-        this.updateListen = this.updateListen.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
 
-        this.props.updateManager(this.updateListen);
-        this.shouldUpdateWeather = true;
+        this.props.registerListener(this.onUpdate);
     }
 
-    getCurrentWeather() {
-        var call = 'api/OWMReq/';
-        if (this.props.paramType === OWMInputTypes.GeoLocation) {
-            call += ('WeatherByGeo/' + this.props.paramVal);
-        }
-        else if (this.props.paramType === OWMInputTypes.CityId) {
-            call += ('WeatherById/' + this.props.paramVal);
-        }
-        else {
-            console.log("parameter type: " + this.props.paramType +
-                " is not supported");
-        }
-        console.log("call: " + call);
-        if ((this.props.paramType === OWMInputTypes.CityId && this.props.paramVal > 0) ||
-            (this.props.paramType === OWMInputTypes.GeoLocation && this.props.paramVal.length > 1)) {
-            fetch(call).then(response => response.json())
-                .then(data => {
-                    console.log(JSON.stringify(data));
-                    this.setState({ weatherData: data });
-                })
-        }
-        else {
-            console.log("skip fetch");
-        }
-    }
-
-    updateListen(update) {
-        this.shouldUpdateWeather = update;
+    onUpdate(weather, forecasts) {
+        this.setState({
+            weatherData: weather,
+        });
     }
 
     render() {
         console.log("CurWeather render");
-        if (!this.shouldUpdateWeather &&
+        if (this.state.weatherData &&
             this.state.weatherData.code &&
             this.state.weatherData.code === 'GOOD') {
             console.log("CurWeather is rendering")
@@ -68,8 +42,6 @@ export class CurrentWeather extends Component {
             );
         }
         else {
-            this.getCurrentWeather();
-            this.shouldUpdateWeather = false;
             const noDataStyle = {
                 fontSize: 'xx-large',
                 textAlign: 'center'

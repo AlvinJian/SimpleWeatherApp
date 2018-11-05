@@ -1,45 +1,25 @@
 ﻿import React, { Component } from 'react';
 import { Col, Grid, Row } from 'react-bootstrap';
-import { OWMInputTypes, Symbol } from '../Config';
+import { Symbol } from '../Config';
 import './Forecast.css'
 
 export class Forecast extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            weatherData: {}
+            forecastData: {}
         };
-        this.getForecast = this.getForecast.bind(this);
-        this.drawForecast = this.drawForecast.bind(this);
-        this.updateListen = this.updateListen.bind(this);
 
-        this.props.updateManager(this.updateListen);
-        this.shouldUpdateForecast = true;
+        this.drawForecast = this.drawForecast.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
+
+        this.props.registerListener(this.onUpdate);
     }
 
-    getForecast() {
-        var call = 'api/OWMReq/';
-        if (this.props.paramType === OWMInputTypes.GeoLocation) {
-            call += ('ForecastByGeo/' + this.props.paramVal);
-        }
-        else if (this.props.paramType === OWMInputTypes.CityId) {
-            call += ('ForecastById/' + this.props.paramVal);
-        }
-        else {
-            console.log("parameter type: " + this.props.paramType +
-                " is not supported");
-        }
-        if ((this.props.paramType === OWMInputTypes.CityId && this.props.paramVal > 0) ||
-            (this.props.paramType === OWMInputTypes.GeoLocation && this.props.paramVal.length > 1)) {
-            fetch(call).then(response => response.json())
-                .then(data => {
-                    console.log(JSON.stringify(data));
-                    this.setState({ weatherData: data });
-                })
-        }
-        else {
-            console.log("skip fetch");
-        }
+    onUpdate(weather, forecasts) {
+        this.setState({
+            forecastData: forecasts,
+        });
     }
 
     drawForecast(forecast) {
@@ -57,15 +37,11 @@ export class Forecast extends Component {
         );
     }
 
-    updateListen(update) {
-        this.shouldUpdateForecast = update;
-    }
-
     render() {
         console.log("Forecast render");
-        if (!this.shouldUpdateForecast &&
-            this.state.weatherData.code &&
-            this.state.weatherData.code === 'GOOD') {
+        if (this.state.forecastData &&
+            this.state.forecastData.code &&
+            this.state.forecastData.code === 'GOOD') {
             console.log("Forecast is rendering")
             return (
                 <Grid>
@@ -73,19 +49,19 @@ export class Forecast extends Component {
                         <div>
                         <Col md={1}> <br/> </Col>
                         <Col md={2}>
-                            {this.drawForecast(this.state.weatherData.forecasts[0])}
+                            {this.drawForecast(this.state.forecastData.forecasts[0])}
                         </Col>
                         <Col md={2}>
-                            {this.drawForecast(this.state.weatherData.forecasts[1])}
+                            {this.drawForecast(this.state.forecastData.forecasts[1])}
                         </Col>
                         <Col md={2}>
-                            {this.drawForecast(this.state.weatherData.forecasts[2])}
+                            {this.drawForecast(this.state.forecastData.forecasts[2])}
                         </Col>
                         <Col md={2}>
-                            {this.drawForecast(this.state.weatherData.forecasts[3])}
+                            {this.drawForecast(this.state.forecastData.forecasts[3])}
                         </Col>
                         <Col md={2}>
-                            {this.drawForecast(this.state.weatherData.forecasts[4])}
+                            {this.drawForecast(this.state.forecastData.forecasts[4])}
                         </Col>
                             <Col md={1}> <br/> </Col>
                             </div>
@@ -94,8 +70,6 @@ export class Forecast extends Component {
             );
         }
         else {
-            this.getForecast();
-            this.shouldUpdateForecast = false;
             return (
                 <div/>
             );

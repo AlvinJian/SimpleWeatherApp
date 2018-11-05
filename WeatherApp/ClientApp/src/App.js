@@ -8,41 +8,51 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            paramType: OWMInputTypes.GeoLocation,
-            paramVal: "",
             cityList: []
         };
-        this.cbList = [];
+        this.paramType = OWMInputTypes.CityId;
+        this.paramVal = -1;
+
+        this.updateListeners = [];
 
         this.getLocation = this.getLocation.bind(this);
         this.renderCityList = this.renderCityList.bind(this);
-        this.registerCallback = this.registerCallback.bind(this);
         this.getLocationAndUpdate = this.getLocationAndUpdate.bind(this);
         this.onCitySelected = this.onCitySelected.bind(this);
+
+        this.getCurrentWeather = this.getCurrentWeather.bind(this);
+        this.getForecast = this.getForecast.bind(this);
+        this.updateAllData = this.updateAllData.bind(this);
+        this.refreshIfNeed = this.refreshIfNeed.bind(this);
+        this.registerListener = this.registerListener.bind(this);
+
+        this.tempWeather = null;
+        this.tempForecast = null;
 
         fetch('api/CityInfo/AllList/')
             .then(response => response.json())
             .then(data => {
                 console.log(JSON.stringify(data));
+                this.paramType = OWMInputTypes.CityId;
+                this.paramVal = data.list[0].id;
                 this.setState({
-                    paramType: OWMInputTypes.CityId,
-                    paramVal: data.list[0].id,
-                    cityList: data.list
-                });
+                    cityList: data.list,
+                }, this.updateAllData);
             });
     }
 
-    getLocation() {
+    getLocation(cb) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const lat = position.coords.latitude.toFixed(2);
                 const lon = position.coords.longitude.toFixed(2);
-                this.setState({
-                    paramType: OWMInputTypes.GeoLocation,
-                    paramVal: "" + lat + "," + lon,
-                })
-                console.log("lat,lon=" + this.state.paramVal);
-            });
+                this.paramType = OWMInputTypes.GeoLocation;
+                this.paramVal = "" + lat + "," + lon;
+                console.log("lat,lon=" + this.paramVal);
+                if (cb) {
+                    cb(true);
+                }
+            }, (err) => { if (cb) { cb(false) } });
         } else {
             console.log("Geolocation is not supported by this browser.");
         }
@@ -58,26 +68,26 @@ export default class App extends Component {
         }
     }
 
-    registerCallback(cb) {
-        this.cbList.push(cb);
-    }
-
     getLocationAndUpdate() {
-        console.log("number of current listener=" + this.cbList.length);
-        for (var i = 0; i < this.cbList.length; ++i) {
-            this.cbList[i](true);
-        }
-        this.getLocation();
+        this.tempWeather = null; this.tempForecast = null;
+        var cb = (success) => {
+            if (success) {
+                this.updateAllData();
+            }
+            else {
+                this.paramType = OWMInputTypes.CityId;
+                this.paramVal = this.state.cityList[0].id;
+                this.updateAllData();
+            }
+        };
+        this.getLocation(cb);
     }
 
     onCitySelected(k, e) {
-        for (var i = 0; i < this.cbList.length; ++i) {
-            this.cbList[i](true);
-        }
-        this.setState({
-            paramType: OWMInputTypes.CityId,
-            paramVal: k
-        });
+        this.tempWeather = null; this.tempForecast = null;
+        this.paramType = OWMInputTypes.CityId;
+        this.paramVal = k;
+        this.updateAllData();
     }
 
     render() {
@@ -87,7 +97,7 @@ export default class App extends Component {
                     Powered by OpenWeatherMap
                 </Label>
 
-                <Row>
+                <Row className="inputBar">
                     <Col md={4} />
                     <Col md={4}>
                         <DropdownButton
@@ -108,20 +118,91 @@ export default class App extends Component {
                         <Col md={4} />
                         <Col md={4}>
                             <CurrentWeather
-                                paramType={this.state.paramType}
-                                paramVal={this.state.paramVal}
-                                updateManager={this.registerCallback} />
+                                paramType={this.paramType}
+                                paramVal={this.paramVal}
+                                registerListener={this.registerListener} />
                         </Col>
                         <Col md={4} />
                     </Row>
                     <Row>
                         <Forecast
-                            paramType={this.state.paramType}
-                            paramVal={this.state.paramVal}
-                            updateManager={this.registerCallback}/>
+                            paramType={this.paramType}
+                            paramVal={this.paramVal}
+                            registerListener={this.registerListener} />
                     </Row>
                 </Grid>
             </div>
         );
+    }
+    
+
+    getForecast() {
+        var call = 'api/OWMReq/';
+        if (this.paramType === OWMInputTypes.GeoLocation) {
+            call += ('ForecastByGeo/' + this.paramVal);
+        }
+        else if (this.paramType === OWMInputTypes.CityId) {
+            call += ('ForecastById/' + this.paramVal);
+        }
+        else {
+            console.log("parameter type: " + this.paramType +
+                " is not supported");
+        }
+        if ((this.paramType === OWMInputTypes.CityId && this.paramVal > 0) ||
+            (this.paramType === OWMInputTypes.GeoLocation && this.paramVal.length > 1)) {
+            fetch(call).then(response => response.json())
+                .then(data => {
+                    console.log(JSON.stringify(data));
+                    this.tempForecast = data;
+                    this.refreshIfNeed();
+                })
+        }
+        else {
+            console.log("skip fetch");
+        }
+    }
+
+    getCurrentWeather() {
+        var call = 'api/OWMReq/';
+        if (this.paramType === OWMInputTypes.GeoLocation) {
+            call += ('WeatherByGeo/' + this.paramVal);
+        }
+        else if (this.paramType === OWMInputTypes.CityId) {
+            call += ('WeatherById/' + this.paramVal);
+        }
+        else {
+            console.log("parameter type: " + this.paramType +
+                " is not supported");
+        }
+        console.log("call: " + call);
+        if ((this.paramType === OWMInputTypes.CityId && this.paramVal > 0) ||
+            (this.paramType === OWMInputTypes.GeoLocation && this.paramVal.length > 1)) {
+            fetch(call).then(response => response.json())
+                .then(data => {
+                    console.log(JSON.stringify(data));
+                    this.tempWeather = data;
+                    this.refreshIfNeed();
+                })
+        }
+        else {
+            console.log("skip fetch");
+        }
+    }
+
+    updateAllData() {
+        this.getCurrentWeather();
+        this.getForecast();
+    }
+
+    refreshIfNeed() {
+        if (this.tempForecast != null && this.tempForecast != null) {
+            for (var i = 0; i < this.updateListeners.length; ++i) {
+                this.updateListeners[i](this.tempWeather, this.tempForecast);
+            }
+        }
+    }
+
+    registerListener(listener) {
+        this.updateListeners.push(listener);
     }
 }
