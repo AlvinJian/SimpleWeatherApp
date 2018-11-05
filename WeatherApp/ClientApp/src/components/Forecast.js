@@ -10,7 +10,7 @@ export class Forecast extends Component {
             weatherData: {}
         };
         this.getForecast = this.getForecast.bind(this);
-        this.drawRaw = this.drawForecast.bind(this);
+        this.drawForecast = this.drawForecast.bind(this);
         this.updateListen = this.updateListen.bind(this);
 
         this.props.updateManager(this.updateListen);
