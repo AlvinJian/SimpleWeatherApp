@@ -11,6 +11,10 @@ export class Forecast extends Component {
         };
         this.getForecast = this.getForecast.bind(this);
         this.drawRaw = this.drawForecast.bind(this);
+        this.updateListen = this.updateListen.bind(this);
+
+        this.props.updateManager(this.updateListen);
+        this.shouldUpdateForecast = true;
     }
 
     getForecast() {
@@ -53,9 +57,14 @@ export class Forecast extends Component {
         );
     }
 
+    updateListen(update) {
+        this.shouldUpdateForecast = update;
+    }
+
     render() {
         console.log("Forecast render");
-        if (this.state.weatherData.code &&
+        if (!this.shouldUpdateForecast &&
+            this.state.weatherData.code &&
             this.state.weatherData.code === 'GOOD') {
             console.log("Forecast is rendering")
             return (
@@ -86,6 +95,7 @@ export class Forecast extends Component {
         }
         else {
             this.getForecast();
+            this.shouldUpdateForecast = false;
             return (
                 <div/>
             );

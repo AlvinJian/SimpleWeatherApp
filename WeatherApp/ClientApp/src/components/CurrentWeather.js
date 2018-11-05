@@ -10,6 +10,10 @@ export class CurrentWeather extends Component {
             weatherData: {}
         };
         this.getCurrentWeather = this.getCurrentWeather.bind(this);
+        this.updateListen = this.updateListen.bind(this);
+
+        this.props.updateManager(this.updateListen);
+        this.shouldUpdateWeather = true;
     }
 
     getCurrentWeather() {
@@ -38,9 +42,14 @@ export class CurrentWeather extends Component {
         }
     }
 
+    updateListen(update) {
+        this.shouldUpdateWeather = update;
+    }
+
     render() {
         console.log("CurWeather render");
-        if (this.state.weatherData.code &&
+        if (!this.shouldUpdateWeather &&
+            this.state.weatherData.code &&
             this.state.weatherData.code === 'GOOD') {
             console.log("CurWeather is rendering")
             return (
@@ -60,6 +69,7 @@ export class CurrentWeather extends Component {
         }
         else {
             this.getCurrentWeather();
+            this.shouldUpdateWeather = false;
             const noDataStyle = {
                 fontSize: 'xx-large',
                 textAlign: 'center'
