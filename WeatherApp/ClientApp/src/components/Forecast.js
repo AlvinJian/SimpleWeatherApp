@@ -6,7 +6,20 @@ import './Forecast.css'
 export class Forecast extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            forecastData: {}
+        };
+
         this.drawForecast = this.drawForecast.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
+
+        this.props.registerListener(this.onUpdate);
+    }
+
+    onUpdate(weather, forecasts) {
+        this.setState({
+            forecastData: forecasts,
+        });
     }
 
     drawForecast(forecast) {
@@ -24,15 +37,11 @@ export class Forecast extends Component {
         );
     }
 
-    updateListen(update) {
-        this.shouldUpdateForecast = update;
-    }
-
     render() {
         console.log("Forecast render");
-        if (this.props.forecastData &&
-            this.props.forecastData.code &&
-            this.props.forecastData.code === 'GOOD') {
+        if (this.state.forecastData &&
+            this.state.forecastData.code &&
+            this.state.forecastData.code === 'GOOD') {
             console.log("Forecast is rendering")
             return (
                 <Grid>
@@ -40,19 +49,19 @@ export class Forecast extends Component {
                         <div>
                         <Col md={1}> <br/> </Col>
                         <Col md={2}>
-                            {this.drawForecast(this.props.forecastData.forecasts[0])}
+                            {this.drawForecast(this.state.forecastData.forecasts[0])}
                         </Col>
                         <Col md={2}>
-                            {this.drawForecast(this.props.forecastData.forecasts[1])}
+                            {this.drawForecast(this.state.forecastData.forecasts[1])}
                         </Col>
                         <Col md={2}>
-                            {this.drawForecast(this.props.forecastData.forecasts[2])}
+                            {this.drawForecast(this.state.forecastData.forecasts[2])}
                         </Col>
                         <Col md={2}>
-                            {this.drawForecast(this.props.forecastData.forecasts[3])}
+                            {this.drawForecast(this.state.forecastData.forecasts[3])}
                         </Col>
                         <Col md={2}>
-                            {this.drawForecast(this.props.forecastData.forecasts[4])}
+                            {this.drawForecast(this.state.forecastData.forecasts[4])}
                         </Col>
                             <Col md={1}> <br/> </Col>
                             </div>
