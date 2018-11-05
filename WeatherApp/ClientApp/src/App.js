@@ -71,6 +71,7 @@ export default class App extends Component {
     }
 
     getLocationAndUpdate() {
+        this.tempWeather = null; this.tempForecast = null;
         var cb = () => {
             this.getLocation(this.updateAllData);
         };
@@ -84,6 +85,7 @@ export default class App extends Component {
     }
 
     onCitySelected(k, e) {
+        this.tempWeather = null; this.tempForecast = null;
         this.setState({
             paramType: OWMInputTypes.CityId,
             paramVal: k,
@@ -201,7 +203,7 @@ export default class App extends Component {
             this.setState({
                 weatherData: this.tempWeather,
                 forecastData: this.tempForecast
-            }, () => { this.tempWeather = null; this.tempForecast = null; });
+            });
         }
     }
 }
