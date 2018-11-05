@@ -44,7 +44,7 @@ export class Forecast extends Component {
 
     drawForecast(forecast) {
         return (
-            <div>
+            <div className="forecast_tile">
                 <h1 className="forecast">
                     {forecast.date} <br/>
                     {forecast.weather}
