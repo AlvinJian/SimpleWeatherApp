@@ -8,17 +8,25 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            paramType: OWMInputTypes.GeoLocation,
+            paramType: OWMInputTypes.CityId,
             paramVal: "",
-            cityList: []
+            cityList: [],
+            weatherData: {},
+            forecastData: {}
         };
-        this.cbList = [];
 
         this.getLocation = this.getLocation.bind(this);
         this.renderCityList = this.renderCityList.bind(this);
-        this.registerCallback = this.registerCallback.bind(this);
         this.getLocationAndUpdate = this.getLocationAndUpdate.bind(this);
         this.onCitySelected = this.onCitySelected.bind(this);
+
+        this.getCurrentWeather = this.getCurrentWeather.bind(this);
+        this.getForecast = this.getForecast.bind(this);
+        this.updateAllData = this.updateAllData.bind(this);
+        this.refreshIfNeed = this.refreshIfNeed.bind(this);
+
+        this.tempWeather = null;
+        this.tempForecast = null;
 
         fetch('api/CityInfo/AllList/')
             .then(response => response.json())
@@ -27,12 +35,14 @@ export default class App extends Component {
                 this.setState({
                     paramType: OWMInputTypes.CityId,
                     paramVal: data.list[0].id,
-                    cityList: data.list
-                });
+                    cityList: data.list,
+                    forecastData: {},
+                    weatherData: {}
+                }, this.updateAllData);
             });
     }
 
-    getLocation() {
+    getLocation(cb) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const lat = position.coords.latitude.toFixed(2);
@@ -40,7 +50,9 @@ export default class App extends Component {
                 this.setState({
                     paramType: OWMInputTypes.GeoLocation,
                     paramVal: "" + lat + "," + lon,
-                })
+                    weatherData: {},
+                    forecastData: {}
+                }, cb)
                 console.log("lat,lon=" + this.state.paramVal);
             });
         } else {
@@ -58,26 +70,26 @@ export default class App extends Component {
         }
     }
 
-    registerCallback(cb) {
-        this.cbList.push(cb);
-    }
-
     getLocationAndUpdate() {
-        console.log("number of current listener=" + this.cbList.length);
-        for (var i = 0; i < this.cbList.length; ++i) {
-            this.cbList[i](true);
-        }
-        this.getLocation();
+        var cb = () => {
+            this.getLocation(this.updateAllData);
+        };
+
+        this.setState({
+            paramType: OWMInputTypes.GeoLocation,
+            paramVal: "",
+            weatherData: {},
+            forecastData: {},
+        }, cb);
     }
 
     onCitySelected(k, e) {
-        for (var i = 0; i < this.cbList.length; ++i) {
-            this.cbList[i](true);
-        }
         this.setState({
             paramType: OWMInputTypes.CityId,
-            paramVal: k
-        });
+            paramVal: k,
+            weatherData: {},
+            forecastData: {}
+        }, this.updateAllData);
     }
 
     render() {
@@ -110,7 +122,7 @@ export default class App extends Component {
                             <CurrentWeather
                                 paramType={this.state.paramType}
                                 paramVal={this.state.paramVal}
-                                updateManager={this.registerCallback} />
+                                weatherData={this.state.weatherData} />
                         </Col>
                         <Col md={4} />
                     </Row>
@@ -118,10 +130,78 @@ export default class App extends Component {
                         <Forecast
                             paramType={this.state.paramType}
                             paramVal={this.state.paramVal}
-                            updateManager={this.registerCallback}/>
+                            forecastData={this.state.forecastData} />
                     </Row>
                 </Grid>
             </div>
         );
+    }
+    
+
+    getForecast() {
+        var call = 'api/OWMReq/';
+        if (this.state.paramType === OWMInputTypes.GeoLocation) {
+            call += ('ForecastByGeo/' + this.state.paramVal);
+        }
+        else if (this.state.paramType === OWMInputTypes.CityId) {
+            call += ('ForecastById/' + this.state.paramVal);
+        }
+        else {
+            console.log("parameter type: " + this.state.paramType +
+                " is not supported");
+        }
+        if ((this.state.paramType === OWMInputTypes.CityId && this.state.paramVal > 0) ||
+            (this.state.paramType === OWMInputTypes.GeoLocation && this.state.paramVal.length > 1)) {
+            fetch(call).then(response => response.json())
+                .then(data => {
+                    console.log(JSON.stringify(data));
+                    this.tempForecast = data;
+                    this.refreshIfNeed();
+                })
+        }
+        else {
+            console.log("skip fetch");
+        }
+    }
+
+    getCurrentWeather() {
+        var call = 'api/OWMReq/';
+        if (this.state.paramType === OWMInputTypes.GeoLocation) {
+            call += ('WeatherByGeo/' + this.state.paramVal);
+        }
+        else if (this.state.paramType === OWMInputTypes.CityId) {
+            call += ('WeatherById/' + this.state.paramVal);
+        }
+        else {
+            console.log("parameter type: " + this.state.paramType +
+                " is not supported");
+        }
+        console.log("call: " + call);
+        if ((this.state.paramType === OWMInputTypes.CityId && this.state.paramVal > 0) ||
+            (this.state.paramType === OWMInputTypes.GeoLocation && this.state.paramVal.length > 1)) {
+            fetch(call).then(response => response.json())
+                .then(data => {
+                    console.log(JSON.stringify(data));
+                    this.tempWeather = data;
+                    this.refreshIfNeed();
+                })
+        }
+        else {
+            console.log("skip fetch");
+        }
+    }
+
+    updateAllData() {
+        this.getCurrentWeather();
+        this.getForecast();
+    }
+
+    refreshIfNeed() {
+        if (this.tempForecast != null && this.tempForecast != null) {
+            this.setState({
+                weatherData: this.tempWeather,
+                forecastData: this.tempForecast
+            }, () => { this.tempWeather = null; this.tempForecast = null; });
+        }
     }
 }
