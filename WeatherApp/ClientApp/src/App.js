@@ -103,32 +103,31 @@ export default class App extends Component {
                     Powered by OpenWeatherMap
                 </Label>
 
-                <Row className="inputBar">
-                    <Col md={4} />
-                    <Col md={4}>
-                        <DropdownButton
-                            title="Select a City"
-                            id="city-list">
-                            {this.renderCityList()}
-                        </DropdownButton>
-                        {'   '}or{'   '}
-                        <Button onClick={this.getLocationAndUpdate}>
-                            Auto-detect
-                        </Button>
-                    </Col>
-                    <Col md={4} />
-                </Row>
-
                 <Grid fluid>
+                    <Row className="inputBar">
+                        <Col md={3} />
+                        <Col md={6}>
+                            <DropdownButton
+                                title="Select a City"
+                                id="city-list">
+                                {this.renderCityList()}
+                            </DropdownButton>
+                            {'   '}or{'   '}
+                            <Button onClick={this.getLocationAndUpdate}>
+                                Auto-detect
+                            </Button>
+                        </Col>
+                        <Col md={3} />
+                    </Row>
                     <Row>
-                        <Col md={4} />
-                        <Col md={4}>
+                        <Col md={3} />
+                        <Col md={6}>
                             <CurrentWeather
                                 paramType={this.paramType}
                                 paramVal={this.paramVal}
                                 registerListener={this.registerListener} />
                         </Col>
-                        <Col md={4} />
+                        <Col md={3} />
                     </Row>
                     <Row>
                         <Forecast
