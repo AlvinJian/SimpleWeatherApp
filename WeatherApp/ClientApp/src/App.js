@@ -70,6 +70,9 @@ export default class App extends Component {
 
     getLocationAndUpdate() {
         this.tempWeather = null; this.tempForecast = null;
+        for (var i = 0; i < this.updateListeners.length; ++i) {
+            this.updateListeners[i]({}, {});
+        }
         var cb = (success) => {
             if (success) {
                 this.updateAllData();
@@ -85,6 +88,9 @@ export default class App extends Component {
 
     onCitySelected(k, e) {
         this.tempWeather = null; this.tempForecast = null;
+        for (var i = 0; i < this.updateListeners.length; ++i) {
+            this.updateListeners[i]({}, {});
+        }
         this.paramType = OWMInputTypes.CityId;
         this.paramVal = k;
         this.updateAllData();
