@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
+import { Card, CardDeck, CardTitle, CardText } from 'reactstrap';
 import { Symbol } from '../Config';
 import './Forecast.css'
 
@@ -24,16 +25,16 @@ export class Forecast extends Component {
 
     drawForecast(forecast) {
         return (
-            <div className="forecast_tile">
-                <h1 className="forecast">
+            <Card body>
+                <CardTitle>
                     {forecast.date} <br/>
                     {forecast.weather}
-                </h1>
-                <p className="forecast">
+                </CardTitle>
+                <CardText>
                     {forecast.temperature + Symbol.DegF}<br/>
                     Humidity {forecast.humidity + Symbol.Percent}
-                </p>
-            </div>
+                </CardText>
+            </Card>
         );
     }
 
@@ -45,27 +46,13 @@ export class Forecast extends Component {
             console.log("Forecast is rendering")
             return (
                 <Container>
-                    <Row>
-                        
-                        <Col md={1}> <br/> </Col>
-                        <Col md={2}>
-                            {this.drawForecast(this.state.forecastData.forecasts[0])}
-                        </Col>
-                        <Col md={2}>
-                            {this.drawForecast(this.state.forecastData.forecasts[1])}
-                        </Col>
-                        <Col md={2}>
-                            {this.drawForecast(this.state.forecastData.forecasts[2])}
-                        </Col>
-                        <Col md={2}>
-                            {this.drawForecast(this.state.forecastData.forecasts[3])}
-                        </Col>
-                        <Col md={2}>
-                            {this.drawForecast(this.state.forecastData.forecasts[4])}
-                        </Col>
-                            <Col md={1}> <br/> </Col>
-                        
-                    </Row>
+                    <CardDeck>
+                        {this.drawForecast(this.state.forecastData.forecasts[0])}
+                        {this.drawForecast(this.state.forecastData.forecasts[1])}
+                        {this.drawForecast(this.state.forecastData.forecasts[2])}
+                        {this.drawForecast(this.state.forecastData.forecasts[3])}
+                        {this.drawForecast(this.state.forecastData.forecasts[4])}
+                    </CardDeck>
                 </Container>
             );
         }

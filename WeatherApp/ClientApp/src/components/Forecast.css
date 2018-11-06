@@ -10,6 +10,10 @@ h1.forecast {
     margin-bottom: 4px;
 }
 
+div.forecast_deck {
+    width: 100%
+}
+
 div.forecast_tile {
     background-color: lightgrey;
     padding: 14px;

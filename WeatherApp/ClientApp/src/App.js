@@ -147,12 +147,10 @@ export default class App extends Component {
                         </Col>
                         <Col md={3} />
                     </Row>
-                    <Row>
-                        <Forecast
-                            paramType={this.paramType}
-                            paramVal={this.paramVal}
-                            registerListener={this.registerListener} />
-                    </Row>
+                    <Forecast className="forecast_deck"
+                        paramType={this.paramType}
+                        paramVal={this.paramVal}
+                        registerListener={this.registerListener} />
                 </Container>
             </div>
         );
