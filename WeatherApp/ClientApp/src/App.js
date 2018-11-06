@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Col, Grid, Row, Label, DropdownButton, MenuItem } from 'react-bootstrap'
+// import { Badge, Button, Col, Container, Row, Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap'
+import { Badge } from 'reactstrap';
+import { Button, ButtonGroup } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
+import { ButtonDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { CurrentWeather } from './components/CurrentWeather';
 import { Forecast } from './components/Forecast';
 import { OWMInputTypes } from './Config';
@@ -8,7 +12,8 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            cityList: []
+            cityList: [],
+            isDropDownOpen: false
         };
         this.paramType = OWMInputTypes.CityId;
         this.paramVal = -1;
@@ -25,6 +30,7 @@ export default class App extends Component {
         this.updateAllData = this.updateAllData.bind(this);
         this.refreshIfNeed = this.refreshIfNeed.bind(this);
         this.registerListener = this.registerListener.bind(this);
+        this.toggleDropdown = this.toggleDropdown.bind(this);
 
         this.tempWeather = null;
         this.tempForecast = null;
@@ -39,6 +45,12 @@ export default class App extends Component {
                     cityList: data.list,
                 }, this.updateAllData);
             });
+    }
+
+    toggleDropdown() {
+        this.setState({
+            isDropDownOpen: !this.state.isDropDownOpen
+        });
     }
 
     getLocation(cb) {
@@ -60,11 +72,11 @@ export default class App extends Component {
 
     renderCityList() {
         if (this.state.cityList.length < 1) {
-            return (<MenuItem eventKey="0">Loading...</MenuItem>);
+            return (<DropdownItem key={0}>Loading...</DropdownItem>);
         }
         else {
             return (this.state.cityList.map(
-                (city) => <MenuItem eventKey={city.id} key={city.id} onSelect={this.onCitySelected} > { city.name }</MenuItem >));
+                (city, i) => <DropdownItem id={city.id} key={city.id} onClick={this.onCitySelected}>{city.name}</DropdownItem>));
         }
     }
 
@@ -86,36 +98,42 @@ export default class App extends Component {
         this.getLocation(cb);
     }
 
-    onCitySelected(k, e) {
+    onCitySelected(evt) {
         this.tempWeather = null; this.tempForecast = null;
         for (var i = 0; i < this.updateListeners.length; ++i) {
             this.updateListeners[i]({}, {});
         }
         this.paramType = OWMInputTypes.CityId;
-        this.paramVal = k;
+        this.paramVal = evt.currentTarget.id;
         this.updateAllData();
     }
 
     render() {
         return (
             <div>
-                <Label>
+                <Badge color="dark">
                     Powered by OpenWeatherMap
-                </Label>
+                </Badge>
 
-                <Grid fluid>
-                    <Row className="inputBar">
+                <Container>
+                    <Row>
                         <Col md={3} />
                         <Col md={6}>
-                            <DropdownButton
-                                title="Select a City"
-                                id="city-list">
-                                {this.renderCityList()}
-                            </DropdownButton>
-                            {'   '}or{'   '}
-                            <Button onClick={this.getLocationAndUpdate}>
-                                Auto-detect
-                            </Button>
+                            <ButtonGroup className="inputBar">
+                                <Dropdown
+                                    isOpen={this.state.isDropDownOpen}
+                                    toggle={this.toggleDropdown}>
+                                    <DropdownToggle outline
+                                        color="secondary" caret> Select a City </DropdownToggle>
+                                    <DropdownMenu>
+                                        {this.renderCityList()}
+                                    </DropdownMenu>
+                                </Dropdown>
+                                <Button
+                                    outline
+                                    onClick={this.getLocationAndUpdate}>
+                                    Auto-detect</Button>
+                            </ButtonGroup>
                         </Col>
                         <Col md={3} />
                     </Row>
@@ -135,7 +153,7 @@ export default class App extends Component {
                             paramVal={this.paramVal}
                             registerListener={this.registerListener} />
                     </Row>
-                </Grid>
+                </Container>
             </div>
         );
     }

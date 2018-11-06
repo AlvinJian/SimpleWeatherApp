@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Col, Grid, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'reactstrap';
 import { Symbol } from '../Config';
 import './Forecast.css'
 
@@ -44,9 +44,9 @@ export class Forecast extends Component {
             this.state.forecastData.code === 'GOOD') {
             console.log("Forecast is rendering")
             return (
-                <Grid>
-                    <Row className="show-grid">
-                        <div>
+                <Container>
+                    <Row>
+                        
                         <Col md={1}> <br/> </Col>
                         <Col md={2}>
                             {this.drawForecast(this.state.forecastData.forecasts[0])}
@@ -64,9 +64,9 @@ export class Forecast extends Component {
                             {this.drawForecast(this.state.forecastData.forecasts[4])}
                         </Col>
                             <Col md={1}> <br/> </Col>
-                            </div>
+                        
                     </Row>
-                </Grid>
+                </Container>
             );
         }
         else {
