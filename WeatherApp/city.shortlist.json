@@ -18,6 +18,15 @@
 		}
 	},
 	{
+		"id": 5368361,
+		"name": "Los Angeles",
+		"country": "US",
+		"coord": {
+			"lon": -118.243683,
+			"lat": 34.052231
+		}
+	},
+	{
 		"id": 1796236,
 		"name": "Shanghai",
 		"country": "CN",
@@ -42,15 +51,6 @@
 		"coord": {
 			"lon": 126.977829,
 			"lat": 37.56826
-		}
-	},
-	{
-		"id": 2867714,
-		"name": "Muenchen",
-		"country": "DE",
-		"coord": {
-			"lon": 11.57549,
-			"lat": 48.137428
 		}
 	},
 	{

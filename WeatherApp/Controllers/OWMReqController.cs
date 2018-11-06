@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WeatherApp.Controllers
@@ -13,7 +10,6 @@ namespace WeatherApp.Controllers
         [Route("WeatherByGeo/{param}")]
         public AppFront.WeatherData GetWeatherByGeo(string param)
         {
-            System.Diagnostics.Debug.WriteLine("WeatherByGeo, param=" + param);
             OWMHandler handler = new OWMHandler();
             AppFront.WeatherData data = new AppFront.WeatherData();
             string[] strs = param.Split(',');
@@ -74,7 +70,6 @@ namespace WeatherApp.Controllers
         [Route("ForecastByGeo/{param}")]
         public AppFront.ForecastData GetForecastByGeo(string param)
         {
-            System.Diagnostics.Debug.WriteLine("ForecastByGeo, param=" + param);
             OWMHandler handler = new OWMHandler();
             AppFront.ForecastData data = new AppFront.ForecastData();
             string[] strs = param.Split(',');
@@ -122,7 +117,6 @@ namespace WeatherApp.Controllers
         [Route("ForecastById/{param}")]
         public AppFront.ForecastData GetForecastById(string param)
         {
-            System.Diagnostics.Debug.WriteLine("GetForecastById, param=" + param);
             OWMHandler handler = new OWMHandler();
             AppFront.ForecastData data = new AppFront.ForecastData();
             long id;

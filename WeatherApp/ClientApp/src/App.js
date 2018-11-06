@@ -60,7 +60,7 @@ export default class App extends Component {
 
     renderCityList() {
         if (this.state.cityList.length < 1) {
-            return (<MenuItem eventKey="0">Nothing</MenuItem>);
+            return (<MenuItem eventKey="0">Loading...</MenuItem>);
         }
         else {
             return (this.state.cityList.map(
