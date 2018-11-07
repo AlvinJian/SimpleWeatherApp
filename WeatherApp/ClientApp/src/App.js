@@ -6,7 +6,7 @@ import { Container, Row, Col } from 'reactstrap';
 import { ButtonDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { CurrentWeather } from './components/CurrentWeather';
 import { Forecast } from './components/Forecast';
-import { OWMInputTypes } from './Config';
+import { OWMInputTypes, BackgroundColors } from './Config';
 
 export default class App extends Component {
     constructor(props) {
@@ -34,6 +34,8 @@ export default class App extends Component {
 
         this.tempWeather = null;
         this.tempForecast = null;
+
+        this.bgColor = BackgroundColors.Default;
 
         fetch('api/CityInfo/AllList/')
             .then(response => response.json())
@@ -109,6 +111,7 @@ export default class App extends Component {
     }
 
     render() {
+        document.body.style.backgroundColor = this.bgColor;
         return (
             <div>
                 <Badge color="dark">
@@ -123,14 +126,14 @@ export default class App extends Component {
                                 <Dropdown
                                     isOpen={this.state.isDropDownOpen}
                                     toggle={this.toggleDropdown}>
-                                    <DropdownToggle outline
-                                        color="secondary" caret> Select a City </DropdownToggle>
+                                    <DropdownToggle
+                                        color="success" caret> Select a City </DropdownToggle>
                                     <DropdownMenu>
                                         {this.renderCityList()}
                                     </DropdownMenu>
                                 </Dropdown>
                                 <Button
-                                    outline
+                                    color="info"
                                     onClick={this.getLocationAndUpdate}>
                                     Auto-detect</Button>
                             </ButtonGroup>
@@ -202,6 +205,12 @@ export default class App extends Component {
                 .then(data => {
                     console.log(JSON.stringify(data));
                     this.tempWeather = data;
+                    if (this.tempWeather.weather in BackgroundColors) {
+                        this.bgColor = BackgroundColors[this.tempWeather.weather];
+                    }
+                    else {
+                        this.bgColor = BackgroundColors.Default;
+                    }
                     this.refreshIfNeed();
                 })
         }
@@ -220,6 +229,7 @@ export default class App extends Component {
             for (var i = 0; i < this.updateListeners.length; ++i) {
                 this.updateListeners[i](this.tempWeather, this.tempForecast);
             }
+            document.body.style.backgroundColor = this.bgColor;
         }
     }
 

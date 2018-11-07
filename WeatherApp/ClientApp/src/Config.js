@@ -8,3 +8,13 @@ export const Symbol = {
     DegC: '°C',
     Percent: "%"
 }
+
+export const BackgroundColors = {
+    "Snow": "ghostwhite",
+    "Clear": "skyblue",
+    "Mist": "lightsteelblue",
+    "Fog": "lightsteelblue",
+    "Rain": "dodgerblue",
+    "Cloud": "lightgray",
+    "Default": "azure"
+}
