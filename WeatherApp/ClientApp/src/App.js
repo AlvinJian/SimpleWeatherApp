@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { Badge, Button, Col, Container, Row, Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap'
 import { Badge } from 'reactstrap';
 import { Button, ButtonGroup } from 'reactstrap';
 import { Container, Row, Col } from 'reactstrap';
@@ -123,17 +122,18 @@ export default class App extends Component {
                         <Col md={3} />
                         <Col md={6}>
                             <ButtonGroup className="inputBar">
-                                <Dropdown
+                                <ButtonDropdown
                                     isOpen={this.state.isDropDownOpen}
                                     toggle={this.toggleDropdown}>
                                     <DropdownToggle
-                                        color="success" caret> Select a City </DropdownToggle>
+                                        style={{ backgroundColor: "yellow", color: "black" }}
+                                        caret> Select a City </DropdownToggle>
                                     <DropdownMenu>
                                         {this.renderCityList()}
                                     </DropdownMenu>
-                                </Dropdown>
+                                </ButtonDropdown >
                                 <Button
-                                    color="info"
+                                    style={{ backgroundColor: "darkcyan" }}
                                     onClick={this.getLocationAndUpdate}>
                                     Auto-detect</Button>
                             </ButtonGroup>
