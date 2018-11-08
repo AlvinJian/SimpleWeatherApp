@@ -15,6 +15,6 @@ export const BackgroundColors = {
     "Mist": "lightsteelblue",
     "Fog": "lightsteelblue",
     "Rain": "dodgerblue",
-    "Cloud": "lightgray",
+    "Clouds": "lightgray",
     "Default": "azure"
 }
