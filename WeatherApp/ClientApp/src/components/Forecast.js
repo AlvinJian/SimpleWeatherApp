@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Col, Container, Row } from 'reactstrap';
-import { Card, CardDeck, CardTitle, CardText } from 'reactstrap';
-import { Symbol } from '../Config';
+import { Card, CardDeck, CardTitle, CardText, CardImg } from 'reactstrap';
+import { Symbol, GetIconPath } from '../Config';
 import './Forecast.css'
 
 export class Forecast extends Component {
@@ -15,6 +15,7 @@ export class Forecast extends Component {
         this.onUpdate = this.onUpdate.bind(this);
 
         this.props.registerListener(this.onUpdate);
+        this.icons = [];
     }
 
     onUpdate(weather, forecasts) {
@@ -23,9 +24,11 @@ export class Forecast extends Component {
         });
     }
 
-    drawForecast(forecast) {
+    drawForecast(index) {
+        let forecast = this.state.forecastData.forecasts[index];
+        let icon = this.icons[index];
         return (
-            <Card body>
+            <Card body className="forecast_tile">
                 <CardTitle>
                     {forecast.date} <br/>
                     {forecast.weather}
@@ -34,6 +37,9 @@ export class Forecast extends Component {
                     {forecast.temperature + Symbol.DegF}<br/>
                     Humidity {forecast.humidity + Symbol.Percent}
                 </CardText>
+                <Container>
+                    <img className="forcastIcon" width="33%" src={require(`${icon}`)} alt="" />
+                </Container>
             </Card>
         );
     }
@@ -43,15 +49,18 @@ export class Forecast extends Component {
         if (this.state.forecastData &&
             this.state.forecastData.code &&
             this.state.forecastData.code === 'GOOD') {
-            console.log("Forecast is rendering")
+            console.log("Forecast is rendering");
+            this.icons = this.state.forecastData.forecasts.map((f, id) => {
+                return GetIconPath(f.weather);
+            });
             return (
                 <Container>
                     <CardDeck>
-                        {this.drawForecast(this.state.forecastData.forecasts[0])}
-                        {this.drawForecast(this.state.forecastData.forecasts[1])}
-                        {this.drawForecast(this.state.forecastData.forecasts[2])}
-                        {this.drawForecast(this.state.forecastData.forecasts[3])}
-                        {this.drawForecast(this.state.forecastData.forecasts[4])}
+                        {this.drawForecast(0)}
+                        {this.drawForecast(1)}
+                        {this.drawForecast(2)}
+                        {this.drawForecast(3)}
+                        {this.drawForecast(4)}
                     </CardDeck>
                 </Container>
             );

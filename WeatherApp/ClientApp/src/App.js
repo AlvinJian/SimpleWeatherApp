@@ -113,8 +113,13 @@ export default class App extends Component {
         document.body.style.backgroundColor = this.bgColor;
         return (
             <div>
-                <Badge color="dark">
+                <Badge className="myBadge"
+                    color="dark">
                     Powered by OpenWeatherMap
+                </Badge>
+                <Badge className="myBadge"
+                    color="dark">
+                    Images from The GNOME Project
                 </Badge>
 
                 <Container>

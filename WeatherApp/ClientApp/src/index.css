@@ -10,3 +10,7 @@ div.inputBar {
     margin-top: 8px;
     margin-bottom: 8px;
 }
+
+span.myBadge {
+    margin: 4px;
+}

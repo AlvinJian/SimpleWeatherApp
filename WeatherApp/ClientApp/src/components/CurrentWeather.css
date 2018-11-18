@@ -12,3 +12,9 @@ h2.curWeather {
     text-align: left;
     font-size: x-large
 }
+
+img.curWeatherIcon {
+    overflow: auto;
+    object-fit: contain;
+    object-position: center;
+}

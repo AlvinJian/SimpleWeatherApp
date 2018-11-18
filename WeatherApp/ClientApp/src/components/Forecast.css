@@ -5,7 +5,7 @@
 
 h1.forecast {
     text-align: left;
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 4px;
     margin-bottom: 4px;
 }
@@ -15,6 +15,13 @@ div.forecast_deck {
 }
 
 div.forecast_tile {
-    background-color: lightgrey;
     padding: 14px;
+    text-align:center;
+    font-size: 14px;
+}
+
+img.forcastIcon {
+    overflow: auto;
+    object-fit: contain;
+    object-position: center;
 }
