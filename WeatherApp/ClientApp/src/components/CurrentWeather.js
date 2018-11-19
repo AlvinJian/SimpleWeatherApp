@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Jumbotron, Container, Row, Col, Media } from 'reactstrap'
-import { Symbol, GetIconPath } from '../Config';
+import { Symbol, GetIconPath, BackgroundImages } from '../Config';
 import './CurrentWeather.css'
 
 export class CurrentWeather extends Component {
@@ -27,8 +27,12 @@ export class CurrentWeather extends Component {
         if (this.state.weatherData &&
             this.state.weatherData.code &&
             this.state.weatherData.code === 'GOOD') {
-            console.log("CurWeather is rendering")
-            this.icon = GetIconPath(this.state.weatherData.weather)
+            console.log("CurWeather is rendering");
+            this.icon = GetIconPath(this.state.weatherData.weather);
+            if (this.state.weatherData.weather in BackgroundImages) {
+                let path = BackgroundImages[this.state.weatherData.weather];
+                document.body.style.backgroundImage = `url(${path})`;
+            }
             return (
                 <Jumbotron>
                     <Container>
@@ -46,15 +50,12 @@ export class CurrentWeather extends Component {
                             </Col>
                             <Col>
                                 <img className="curWeatherIcon"
-                                    src={require(`${ this.icon }`)}
+                                    src={this.icon}
                                     alt=""
                                     width="100%"
                                     height="100%" />
                             </Col>
                         </Row>
-                        
-                            
-                        
                     </Container>
                 </Jumbotron>
             );

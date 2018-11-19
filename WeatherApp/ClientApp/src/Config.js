@@ -20,13 +20,13 @@ export const BackgroundColors = {
 }
 
 export const IconMap = {
-    "Snow": "./icons/weather-snow-symbolic.svg",
-    "Clear": "./icons/weather-clear-symbolic.svg",
-    "Mist": "./icons/weather-fog-symbolic.svg",
-    "Fog": "./icons/weather-fog-symbolic.svg",
-    "Rain": "./icons/weather-showers-symbolic.svg",
-    "Clouds": "./icons/weather-overcast-symbolic.svg",
-    "Default": "./icons/unknown-symbolic.svg"
+    "Snow": require("./icons/weather-snow-symbolic.svg"),
+    "Clear": require("./icons/weather-clear-symbolic.svg"),
+    "Mist": require("./icons/weather-fog-symbolic.svg"),
+    "Fog": require("./icons/weather-fog-symbolic.svg"),
+    "Rain": require("./icons/weather-showers-symbolic.svg"),
+    "Clouds": require("./icons/weather-overcast-symbolic.svg"),
+    "Default": require("./icons/unknown-symbolic.svg")
 }
 
 export function GetIconPath(condition) {
@@ -36,4 +36,13 @@ export function GetIconPath(condition) {
     else {
         return IconMap.Default;
     }
-} 
+}
+
+export const BackgroundImages = {
+    "Snow": require("./backgrounds/weather-snow.jpg"),
+    "Clear": require("./backgrounds/weather-few-clouds.jpg"),
+    "Mist": require("./backgrounds/weather-fog.jpg"),
+    "Fog": require("./backgrounds/weather-fog.jpg"),
+    "Rain": require("./backgrounds/weather-showers.jpg"),
+    "Clouds": require("./backgrounds/weather-overcast.jpg")
+}

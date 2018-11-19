@@ -38,7 +38,7 @@ export class Forecast extends Component {
                     Humidity {forecast.humidity + Symbol.Percent}
                 </CardText>
                 <Container>
-                    <img className="forcastIcon" width="33%" src={require(`${icon}`)} alt="" />
+                    <img className="forcastIcon" width="33%" src={icon} alt="" />
                 </Container>
             </Card>
         );

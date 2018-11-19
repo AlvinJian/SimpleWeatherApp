@@ -5,7 +5,7 @@ import { Container, Row, Col } from 'reactstrap';
 import { ButtonDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { CurrentWeather } from './components/CurrentWeather';
 import { Forecast } from './components/Forecast';
-import { OWMInputTypes, BackgroundColors } from './Config';
+import { OWMInputTypes } from './Config';
 
 export default class App extends Component {
     constructor(props) {
@@ -33,8 +33,6 @@ export default class App extends Component {
 
         this.tempWeather = null;
         this.tempForecast = null;
-
-        this.bgColor = BackgroundColors.Default;
 
         fetch('api/CityInfo/AllList/')
             .then(response => response.json())
@@ -110,7 +108,6 @@ export default class App extends Component {
     }
 
     render() {
-        document.body.style.backgroundColor = this.bgColor;
         return (
             <div>
                 <Badge className="myBadge"
@@ -210,12 +207,6 @@ export default class App extends Component {
                 .then(data => {
                     console.log(JSON.stringify(data));
                     this.tempWeather = data;
-                    if (this.tempWeather.weather in BackgroundColors) {
-                        this.bgColor = BackgroundColors[this.tempWeather.weather];
-                    }
-                    else {
-                        this.bgColor = BackgroundColors.Default;
-                    }
                     this.refreshIfNeed();
                 })
         }
@@ -234,7 +225,6 @@ export default class App extends Component {
             for (var i = 0; i < this.updateListeners.length; ++i) {
                 this.updateListeners[i](this.tempWeather, this.tempForecast);
             }
-            document.body.style.backgroundColor = this.bgColor;
         }
     }
 
