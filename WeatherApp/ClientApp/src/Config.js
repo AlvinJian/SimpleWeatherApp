@@ -14,6 +14,7 @@ export const BackgroundColors = {
     "Clear": "skyblue",
     "Mist": "lightsteelblue",
     "Fog": "lightsteelblue",
+    "Haze": "lightsteelblue",
     "Rain": "dodgerblue",
     "Clouds": "lightgray",
     "Default": "azure"
@@ -24,9 +25,11 @@ export const IconMap = {
     "Clear": require("./icons/weather-clear-symbolic.svg"),
     "Mist": require("./icons/weather-fog-symbolic.svg"),
     "Fog": require("./icons/weather-fog-symbolic.svg"),
+    "Haze": require("./icons/weather-fog-symbolic.svg"),
     "Rain": require("./icons/weather-showers-symbolic.svg"),
     "Clouds": require("./icons/weather-overcast-symbolic.svg"),
-    "Default": require("./icons/unknown-symbolic.svg")
+    "Default": require("./icons/unknown-symbolic.svg"),
+    "Storm": require("./icons/weather-storm-symbolic.svg")
 }
 
 export function GetIconPath(condition) {
@@ -43,6 +46,8 @@ export const BackgroundImages = {
     "Clear": require("./backgrounds/weather-few-clouds.jpg"),
     "Mist": require("./backgrounds/weather-fog.jpg"),
     "Fog": require("./backgrounds/weather-fog.jpg"),
+    "Haze": require("./backgrounds/weather-fog.jpg"),
     "Rain": require("./backgrounds/weather-showers.jpg"),
-    "Clouds": require("./backgrounds/weather-overcast.jpg")
+    "Clouds": require("./backgrounds/weather-overcast.jpg"),
+    "Storm": require("./backgrounds/weather-storm.jpg")
 }

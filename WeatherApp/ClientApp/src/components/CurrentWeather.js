@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Jumbotron, Container, Row, Col, Media } from 'reactstrap'
-import { Symbol, GetIconPath, BackgroundImages } from '../Config';
+import { Symbol, GetIconPath, BackgroundImages, BackgroundColors } from '../Config';
 import './CurrentWeather.css'
 
 export class CurrentWeather extends Component {
@@ -32,6 +32,8 @@ export class CurrentWeather extends Component {
             if (this.state.weatherData.weather in BackgroundImages) {
                 let path = BackgroundImages[this.state.weatherData.weather];
                 document.body.style.backgroundImage = `url(${path})`;
+            } else {
+                document.body.style.backgroundColor = BackgroundColors.Default;
             }
             return (
                 <Jumbotron>
