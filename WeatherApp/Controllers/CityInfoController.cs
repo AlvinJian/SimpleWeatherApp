@@ -11,7 +11,7 @@ namespace WeatherApp.Controllers
     {
         private static OWMCity[] Cities = null;
 
-        [Route("AllList/")]
+        [System.Obsolete("load data from mongodb not here")]
         public AppFront.CityList GetAllCities()
         {
             if (Cities == null)
@@ -26,11 +26,30 @@ namespace WeatherApp.Controllers
                 _c.Name = c.Name;
                 _c.Country = c.Country;
                 _c.Id = c.Id;
+                _c.Lat = c.Coord.Lat;
+                _c.Lon = c.Coord.Lon;
                 l.AddLast(_c);
             }
             var ret = new AppFront.CityList();
             ret.Code = AppFront.ReturnCode.GOOD;
             ret.List = l.ToArray();
+            return ret;
+        }
+
+        [Route("ShortList/")]
+        public AppFront.CityList GetShortList()
+        {
+            var ret = new AppFront.CityList();
+            ret.List = CityModel.LoadShortCityList();
+            if (ret.List.Length > 0)
+            {
+                ret.Code = AppFront.ReturnCode.GOOD;
+            }
+            else
+            {
+                ret.Code = AppFront.ReturnCode.BAD;
+            }
+
             return ret;
         }
     }

@@ -34,7 +34,7 @@ export default class App extends Component {
         this.tempWeather = null;
         this.tempForecast = null;
 
-        fetch('api/CityInfo/AllList/')
+        fetch('api/CityInfo/ShortList/')
             .then(response => response.json())
             .then(data => {
                 console.log(JSON.stringify(data));
