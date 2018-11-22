@@ -11,13 +11,18 @@ namespace WeatherApp
 {
     public class CityModel
     {
-        // TODO study how to do these things professionally
-        public static AppFront.CityList.City[] LoadShortCityList()
+        private MongoClient client;
+        private IMongoDatabase database;
+
+        public CityModel(string uri)
         {
-            String uri = String.Format("mongodb://{0}:{1}@ds044587.mlab.com:44587/weatherapp",
-                "weather_app", "zoo1234");
-            var client = new MongoClient(uri);
-            var database = client.GetDatabase("weatherapp");
+            client = new MongoClient(uri);
+            database = client.GetDatabase("weatherapp");
+        }
+
+        // TODO study how to do these things professionally
+        public AppFront.CityList.City[] LoadShortCityList()
+        {
             var collection = database.GetCollection<BsonDocument>("shortcity");
             var cursor = collection.Find(new BsonDocument()).ToCursor();
             var list = new LinkedList<AppFront.CityList.City>();

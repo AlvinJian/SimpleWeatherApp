@@ -10,13 +10,14 @@ namespace WeatherApp
 {
     public class OWMHandler
     {
-        private static string API_KEY = "6d0f3bbd5083fef517dd12ee2cfc9c62";
         private static string END_POINT = "http://api.openweathermap.org/data/2.5/";
 
-        private String Unit; 
+        private String Unit;
+        private readonly string API_KEY;
 
-        public OWMHandler() {
+        public OWMHandler(string key) {
             Unit = "imperial";
+            API_KEY = key;
         }
 
         public OWMWeather GetWeather(String lat, String lon)

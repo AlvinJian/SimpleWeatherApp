@@ -9,38 +9,18 @@ namespace WeatherApp.Controllers
     [ApiController]
     public class CityInfoController : ControllerBase
     {
-        private static OWMCity[] Cities = null;
+        private CityModel model = null;
 
-        [System.Obsolete("load data from mongodb not here")]
-        public AppFront.CityList GetAllCities()
+        public CityInfoController(OWMHandler owmHandler, CityModel cityModel)
         {
-            if (Cities == null)
-            {
-                Cities = OWMCity.LoadOWMCityList();
-            }
-
-            var l = new LinkedList<AppFront.CityList.City>();
-            foreach (OWMCity c in Cities)
-            {
-                var _c = new AppFront.CityList.City();
-                _c.Name = c.Name;
-                _c.Country = c.Country;
-                _c.Id = c.Id;
-                _c.Lat = c.Coord.Lat;
-                _c.Lon = c.Coord.Lon;
-                l.AddLast(_c);
-            }
-            var ret = new AppFront.CityList();
-            ret.Code = AppFront.ReturnCode.GOOD;
-            ret.List = l.ToArray();
-            return ret;
+            model = cityModel;
         }
 
         [Route("ShortList/")]
         public AppFront.CityList GetShortList()
         {
             var ret = new AppFront.CityList();
-            ret.List = CityModel.LoadShortCityList();
+            ret.List = model.LoadShortCityList();
             if (ret.List.Length > 0)
             {
                 ret.Code = AppFront.ReturnCode.GOOD;

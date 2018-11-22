@@ -7,10 +7,16 @@ namespace WeatherApp.Controllers
     [Route("api/[controller]")]
     public class OWMReqController : Controller
     {
+        private OWMHandler handler = null;
+
+        public OWMReqController(OWMHandler owmHandler, CityModel cityModel)
+        {
+            handler = owmHandler;
+        }
+
         [Route("WeatherByGeo/{param}")]
         public AppFront.WeatherData GetWeatherByGeo(string param)
         {
-            OWMHandler handler = new OWMHandler();
             AppFront.WeatherData data = new AppFront.WeatherData();
             string[] strs = param.Split(',');
             if (strs.Length < 2)
@@ -48,7 +54,6 @@ namespace WeatherApp.Controllers
                 data.Code = AppFront.ReturnCode.BAD;
                 return data;
             }
-            OWMHandler handler = new OWMHandler();
             var resp = handler.GetWeather(id);
             if (resp == null)
             {
@@ -70,7 +75,6 @@ namespace WeatherApp.Controllers
         [Route("ForecastByGeo/{param}")]
         public AppFront.ForecastData GetForecastByGeo(string param)
         {
-            OWMHandler handler = new OWMHandler();
             AppFront.ForecastData data = new AppFront.ForecastData();
             string[] strs = param.Split(',');
             if (strs.Length < 2)
@@ -117,7 +121,6 @@ namespace WeatherApp.Controllers
         [Route("ForecastById/{param}")]
         public AppFront.ForecastData GetForecastById(string param)
         {
-            OWMHandler handler = new OWMHandler();
             AppFront.ForecastData data = new AppFront.ForecastData();
             long id;
             if (!long.TryParse(param, out id))
