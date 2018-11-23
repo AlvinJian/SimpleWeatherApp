@@ -20,11 +20,26 @@ namespace WeatherApp
             database = client.GetDatabase("weatherapp");
         }
 
-        // TODO study how to do these things professionally
-        public AppFront.CityList.City[] LoadShortCityList()
+        public AppFront.CityList.City[] GetShortCityList()
         {
             var collection = database.GetCollection<BsonDocument>("shortcity");
-            var cursor = collection.Find(new BsonDocument()).ToCursor();
+            return DoSearch(collection, new BsonDocument());
+        }
+
+        public AppFront.CityList.City[] StartWith(string keyword)
+        {
+            string pattern = String.Format("(?i)^{0}", keyword);
+            var startWithRegex = new BsonRegularExpression(pattern);
+            var filter = new BsonDocumentFilterDefinition<BsonDocument>(
+                new BsonDocument("name", startWithRegex));
+            var collection = database.GetCollection<BsonDocument>("allcity");
+            return DoSearch(collection, filter);
+        }
+
+        public AppFront.CityList.City[] DoSearch(IMongoCollection<BsonDocument> collection,
+            FilterDefinition<BsonDocument> filter)
+        {
+            var cursor = collection.Find<BsonDocument>(filter).ToCursor();
             var list = new LinkedList<AppFront.CityList.City>();
             foreach (var document in cursor.ToEnumerable())
             {

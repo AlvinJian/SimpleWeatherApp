@@ -20,7 +20,24 @@ namespace WeatherApp.Controllers
         public AppFront.CityList GetShortList()
         {
             var ret = new AppFront.CityList();
-            ret.List = model.LoadShortCityList();
+            ret.List = model.GetShortCityList();
+            if (ret.List.Length > 0)
+            {
+                ret.Code = AppFront.ReturnCode.GOOD;
+            }
+            else
+            {
+                ret.Code = AppFront.ReturnCode.BAD;
+            }
+
+            return ret;
+        }
+
+        [Route("SearchCity/{keyword}")]
+        public AppFront.CityList SearchCity(string keyword)
+        {
+            var ret = new AppFront.CityList();
+            ret.List = model.StartWith(keyword);
             if (ret.List.Length > 0)
             {
                 ret.Code = AppFront.ReturnCode.GOOD;
