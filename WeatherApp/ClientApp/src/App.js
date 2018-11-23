@@ -37,7 +37,7 @@ export default class App extends Component {
         fetch('api/CityInfo/ShortList/')
             .then(response => response.json())
             .then(data => {
-                console.log(JSON.stringify(data));
+                // console.log(JSON.stringify(data));
                 this.paramType = OWMInputTypes.CityId;
                 this.paramVal = data.list[0].id;
                 this.setState({
@@ -59,7 +59,6 @@ export default class App extends Component {
                 const lon = position.coords.longitude.toFixed(2);
                 this.paramType = OWMInputTypes.GeoLocation;
                 this.paramVal = "" + lat + "," + lon;
-                console.log("lat,lon=" + this.paramVal);
                 if (cb) {
                     cb(true);
                 }
@@ -178,7 +177,7 @@ export default class App extends Component {
             (this.paramType === OWMInputTypes.GeoLocation && this.paramVal.length > 1)) {
             fetch(call).then(response => response.json())
                 .then(data => {
-                    console.log(JSON.stringify(data));
+                    // console.log(JSON.stringify(data));
                     this.tempForecast = data;
                     this.refreshIfNeed();
                 })
@@ -200,12 +199,12 @@ export default class App extends Component {
             console.log("parameter type: " + this.paramType +
                 " is not supported");
         }
-        console.log("call: " + call);
+        // console.log("call: " + call);
         if ((this.paramType === OWMInputTypes.CityId && this.paramVal > 0) ||
             (this.paramType === OWMInputTypes.GeoLocation && this.paramVal.length > 1)) {
             fetch(call).then(response => response.json())
                 .then(data => {
-                    console.log(JSON.stringify(data));
+                    // console.log(JSON.stringify(data));
                     this.tempWeather = data;
                     this.refreshIfNeed();
                 })
