@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Badge } from 'reactstrap';
+import { Input, InputGroup } from 'reactstrap';
 import { Button, ButtonGroup } from 'reactstrap';
 import { Container, Row, Col } from 'reactstrap';
 import { ButtonDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -30,6 +31,8 @@ export default class App extends Component {
         this.refreshIfNeed = this.refreshIfNeed.bind(this);
         this.registerListener = this.registerListener.bind(this);
         this.toggleDropdown = this.toggleDropdown.bind(this);
+        this.searchCity = this.searchCity.bind(this);
+        this.searchHandle = null;
 
         this.tempWeather = null;
         this.tempForecast = null;
@@ -43,6 +46,7 @@ export default class App extends Component {
                 this.setState({
                     cityList: data.list,
                 }, this.updateAllData);
+                this.shortCity = data.list;
             });
     }
 
@@ -68,13 +72,62 @@ export default class App extends Component {
         }
     }
 
+    
+
+    searchCity(evt) {
+        console.log("keyword: " + evt.currentTarget.value);
+        let keyword = evt.currentTarget.value.trim();
+        if (this.searchHandle != null) {
+            clearTimeout(this.searchHandle);
+        }
+        this.searchHandle = setTimeout(() => {
+            if (keyword.length > 3) {
+                fetch('api/CityInfo/SearchCity/' + keyword)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.setState({
+                            cityList: data.list,
+                        });
+                    });
+            } else if (keyword.length > 0) {
+                this.setState(
+                    { cityList: [] }
+                );
+            } else if (keyword.length == 0) {
+                if (this.shortCity) {
+                    this.setState(
+                        { cityList: this.shortCity }
+                    );
+                }
+            }
+            this.searchHandle = null;
+        }, 1200);
+    }
+
     renderCityList() {
         if (this.state.cityList.length < 1) {
-            return (<DropdownItem key={0}>Loading...</DropdownItem>);
-        }
-        else {
-            return (this.state.cityList.map(
-                (city, i) => <DropdownItem id={city.id} key={city.id} onClick={this.onCitySelected}>{city.name}</DropdownItem>));
+            return (
+                <div>
+                    <InputGroup>
+                        <Input
+                            type="text"
+                            placeholder="> 3 characters to search"
+                            onChange={this.searchCity} />
+                    </InputGroup>
+                    <DropdownItem key={0}>No city yet...</DropdownItem>
+                </div>);
+        } else {
+            return (
+                <div>
+                    <InputGroup>
+                        <Input
+                            type="text"
+                            placeholder="> 3 characters to search"
+                            onChange={this.searchCity} />
+                    </InputGroup>
+                    {this.state.cityList.map(
+                        (city, i) => <DropdownItem id={city.id} key={city.id} onClick={this.onCitySelected}>{city.name}, {city.country}</DropdownItem>)}
+                </div>)
         }
     }
 
@@ -128,11 +181,11 @@ export default class App extends Component {
                                     toggle={this.toggleDropdown}>
                                     <DropdownToggle
                                         style={{ backgroundColor: "yellow", color: "black" }}
-                                        caret> Select a City </DropdownToggle>
+                                        caret> Search and Select a City </DropdownToggle>
                                     <DropdownMenu>
                                         {this.renderCityList()}
                                     </DropdownMenu>
-                                </ButtonDropdown >
+                                </ButtonDropdown>
                                 <Button
                                     style={{ backgroundColor: "darkcyan" }}
                                     onClick={this.getLocationAndUpdate}>
