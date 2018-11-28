@@ -14,3 +14,8 @@ div.inputBar {
 span.myBadge {
     margin: 4px;
 }
+
+div.dropdownMenu {
+    max-height: 480px;
+    overflow-y: scroll;
+}

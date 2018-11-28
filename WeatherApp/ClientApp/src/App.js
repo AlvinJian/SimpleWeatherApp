@@ -111,7 +111,7 @@ export default class App extends Component {
                     <InputGroup>
                         <Input
                             type="text"
-                            placeholder="> 3 characters to search"
+                            placeholder="Type to Search ( > 3 characters)"
                             onChange={this.searchCity} />
                     </InputGroup>
                     <DropdownItem key={0}>No city yet...</DropdownItem>
@@ -122,11 +122,13 @@ export default class App extends Component {
                     <InputGroup>
                         <Input
                             type="text"
-                            placeholder="> 3 characters to search"
+                            placeholder="Type to Search( > 3 characters)"
                             onChange={this.searchCity} />
                     </InputGroup>
                     {this.state.cityList.map(
-                        (city, i) => <DropdownItem id={city.id} key={city.id} onClick={this.onCitySelected}>{city.name}, {city.country}</DropdownItem>)}
+                        (city, i) => <DropdownItem id={city.id} key={city.id} onClick={this.onCitySelected}>
+                            {city.name}, {city.country}, ({city.lat.toFixed(2)},{city.lon.toFixed(2)})
+                        </DropdownItem>)}
                 </div>)
         }
     }
@@ -182,7 +184,7 @@ export default class App extends Component {
                                     <DropdownToggle
                                         style={{ backgroundColor: "yellow", color: "black" }}
                                         caret> Search and Select a City </DropdownToggle>
-                                    <DropdownMenu>
+                                    <DropdownMenu className="dropdownMenu">
                                         {this.renderCityList()}
                                     </DropdownMenu>
                                 </ButtonDropdown>
