@@ -33,6 +33,7 @@ export class CurrentWeather extends Component {
                 let path = BackgroundImages[this.state.weatherData.weather];
                 document.body.style.backgroundImage = `url(${path})`;
             } else {
+                document.body.style.backgroundImage = null;
                 document.body.style.backgroundColor = BackgroundColors.Default;
             }
             return (

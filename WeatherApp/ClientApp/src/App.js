@@ -48,6 +48,9 @@ export default class App extends Component {
                 }, this.updateAllData);
                 this.shortCity = data.list;
             });
+
+        this.searchTimeOutVal = 1000;
+        this.searchKeyword = "";
     }
 
     toggleDropdown() {
@@ -76,24 +79,25 @@ export default class App extends Component {
 
     searchCity(evt) {
         console.log("keyword: " + evt.currentTarget.value);
-        let keyword = evt.currentTarget.value.trim();
+        this.searchKeyword = evt.currentTarget.value.trim();
         if (this.searchHandle != null) {
             clearTimeout(this.searchHandle);
         }
         this.searchHandle = setTimeout(() => {
-            if (keyword.length > 3) {
-                fetch('api/CityInfo/SearchCity/' + keyword)
+            if (this.searchKeyword.length > 3) {
+                fetch('api/CityInfo/SearchCity/' + this.searchKeyword)
                     .then(response => response.json())
                     .then(data => {
                         this.setState({
                             cityList: data.list,
                         });
                     });
-            } else if (keyword.length > 0) {
+            } else if (this.searchKeyword.length > 0 &&
+                this.searchKeyword.length <= 3 && this.state.cityList.length > 0) {
                 this.setState(
                     { cityList: [] }
                 );
-            } else if (keyword.length == 0) {
+            } else if (this.searchKeyword.length == 0) {
                 if (this.shortCity) {
                     this.setState(
                         { cityList: this.shortCity }
@@ -101,28 +105,37 @@ export default class App extends Component {
                 }
             }
             this.searchHandle = null;
-        }, 1200);
+        }, this.searchTimeOutVal);
     }
 
     renderCityList() {
+        let custom = { margin: "5px" };
         if (this.state.cityList.length < 1) {
+            let emptyMsg = "";
+            if (this.searchKeyword.length > 0 && this.searchKeyword.length <= 3) {
+                emptyMsg += "Type first 4 or more char to Search";
+            } else {
+                emptyMsg += "No city yet...";
+            }
             return (
                 <div>
                     <InputGroup>
                         <Input
+                            style={custom}
                             type="text"
-                            placeholder="Type to Search ( > 3 characters)"
+                            placeholder="Type first 4 or more char to Search"
                             onChange={this.searchCity} />
                     </InputGroup>
-                    <DropdownItem key={0}>No city yet...</DropdownItem>
+                    <DropdownItem key={0}>{emptyMsg}</DropdownItem>
                 </div>);
         } else {
             return (
                 <div>
                     <InputGroup>
                         <Input
+                            style={custom}
                             type="text"
-                            placeholder="Type to Search( > 3 characters)"
+                            placeholder="Type first 4 or more char to Search"
                             onChange={this.searchCity} />
                     </InputGroup>
                     {this.state.cityList.map(
@@ -182,7 +195,7 @@ export default class App extends Component {
                                     isOpen={this.state.isDropDownOpen}
                                     toggle={this.toggleDropdown}>
                                     <DropdownToggle
-                                        style={{ backgroundColor: "yellow", color: "black" }}
+                                        style={{ backgroundColor: "yellow", color: "black"}}
                                         caret> Search and Select a City </DropdownToggle>
                                     <DropdownMenu className="dropdownMenu">
                                         {this.renderCityList()}
