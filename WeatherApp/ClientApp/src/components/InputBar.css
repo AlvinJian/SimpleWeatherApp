@@ -5,6 +5,7 @@
 
 div.dropdownMenu {
     max-height: 560px;
+    max-width: inherit;
     min-width: 320px;
     overflow-y: scroll;
 }

@@ -85,7 +85,7 @@ export default class InputBar extends Component {
     }
 
     renderCityList() {
-        let custom = { margin: "5px" };
+        let custom = { margin: "5px", maxWidth: "inherit"};
         let _showList;
         let emptyMsg = "";
         if (!this.isLoading && this.state.cityList.length > 0) {
