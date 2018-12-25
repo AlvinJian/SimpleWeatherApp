@@ -14,7 +14,7 @@ namespace WeatherApp.Controllers
             handler = owmHandler;
         }
 
-        [Route("WeatherByGeo/{param}")]
+        [HttpGet("WeatherByGeo/{param}")]
         public AppFront.WeatherData GetWeatherByGeo(string param)
         {
             AppFront.WeatherData data = new AppFront.WeatherData();
@@ -44,7 +44,7 @@ namespace WeatherApp.Controllers
             return data;
         }
 
-        [Route("WeatherById/{param}")]
+        [HttpGet("WeatherById/{param}")]
         public AppFront.WeatherData GetWeatherById(string param)
         {
             long id;
@@ -72,7 +72,7 @@ namespace WeatherApp.Controllers
             return data;
         }
 
-        [Route("ForecastByGeo/{param}")]
+        [HttpGet("ForecastByGeo/{param}")]
         public AppFront.ForecastData GetForecastByGeo(string param)
         {
             AppFront.ForecastData data = new AppFront.ForecastData();
@@ -118,7 +118,7 @@ namespace WeatherApp.Controllers
             return data;
         }
 
-        [Route("ForecastById/{param}")]
+        [HttpGet("ForecastById/{param}")]
         public AppFront.ForecastData GetForecastById(string param)
         {
             AppFront.ForecastData data = new AppFront.ForecastData();

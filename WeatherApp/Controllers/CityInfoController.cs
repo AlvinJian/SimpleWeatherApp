@@ -16,7 +16,7 @@ namespace WeatherApp.Controllers
             model = cityModel;
         }
 
-        [Route("ShortList/")]
+        [HttpGet("ShortList/")]
         public AppFront.CityList GetShortList()
         {
             var ret = new AppFront.CityList();
@@ -33,7 +33,7 @@ namespace WeatherApp.Controllers
             return ret;
         }
 
-        [Route("SearchCity/{keyword}")]
+        [HttpGet("SearchCity/{keyword}")]
         public AppFront.CityList SearchCity(string keyword)
         {
             var ret = new AppFront.CityList();
