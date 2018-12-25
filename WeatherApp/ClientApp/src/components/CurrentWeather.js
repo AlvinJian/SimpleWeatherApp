@@ -3,7 +3,7 @@ import { Jumbotron, Container, Row, Col, Media } from 'reactstrap'
 import { Symbol, GetIconPath, BackgroundImages, BackgroundColors } from '../Config';
 import './CurrentWeather.css'
 
-export class CurrentWeather extends Component {
+export default class CurrentWeather extends Component {
     constructor(props) {
         super(props);
         this.state = {

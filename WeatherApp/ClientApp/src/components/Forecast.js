@@ -4,7 +4,7 @@ import { Card, CardDeck, CardTitle, CardText, CardImg } from 'reactstrap';
 import { Symbol, GetIconPath } from '../Config';
 import './Forecast.css'
 
-export class Forecast extends Component {
+export default class Forecast extends Component {
     constructor(props) {
         super(props);
         this.state = {

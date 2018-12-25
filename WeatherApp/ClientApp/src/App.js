@@ -1,62 +1,29 @@
 import React, { Component } from 'react';
 import { Badge } from 'reactstrap';
-import { Input, InputGroup } from 'reactstrap';
-import { Button, ButtonGroup } from 'reactstrap';
 import { Container, Row, Col } from 'reactstrap';
-import { ButtonDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { CurrentWeather } from './components/CurrentWeather';
-import { Forecast } from './components/Forecast';
+import CurrentWeather from './components/CurrentWeather';
+import Forecast from './components/Forecast';
+import InputBar from './components/InputBar';
 import { OWMInputTypes } from './Config';
 
 export default class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            cityList: [],
-            isDropDownOpen: false
-        };
         this.paramType = OWMInputTypes.CityId;
         this.paramVal = -1;
 
         this.updateListeners = [];
 
         this.getLocation = this.getLocation.bind(this);
-        this.renderCityList = this.renderCityList.bind(this);
-        this.getLocationAndUpdate = this.getLocationAndUpdate.bind(this);
-        this.onCitySelected = this.onCitySelected.bind(this);
-
         this.getCurrentWeather = this.getCurrentWeather.bind(this);
         this.getForecast = this.getForecast.bind(this);
         this.updateAllData = this.updateAllData.bind(this);
         this.refreshIfNeed = this.refreshIfNeed.bind(this);
         this.registerListener = this.registerListener.bind(this);
-        this.toggleDropdown = this.toggleDropdown.bind(this);
-        this.searchCity = this.searchCity.bind(this);
-        this.searchHandle = null;
+        this.onInputChange = this.onInputChange.bind(this);
 
         this.tempWeather = null;
         this.tempForecast = null;
-
-        fetch('api/CityInfo/ShortList/')
-            .then(response => response.json())
-            .then(data => {
-                // console.log(JSON.stringify(data));
-                this.paramType = OWMInputTypes.CityId;
-                this.paramVal = data.list[0].id;
-                this.setState({
-                    cityList: data.list,
-                }, this.updateAllData);
-                this.shortCity = data.list;
-            });
-
-        this.searchTimeOutVal = 1000;
-        this.searchKeyword = "";
-    }
-
-    toggleDropdown() {
-        this.setState({
-            isDropDownOpen: !this.state.isDropDownOpen
-        });
     }
 
     getLocation(cb) {
@@ -75,103 +42,31 @@ export default class App extends Component {
         }
     }
 
-    
-
-    searchCity(evt) {
-        console.log("keyword: " + evt.currentTarget.value);
-        this.searchKeyword = evt.currentTarget.value.trim();
-        if (this.searchHandle != null) {
-            clearTimeout(this.searchHandle);
-        }
-        this.searchHandle = setTimeout(() => {
-            if (this.searchKeyword.length > 3) {
-                fetch('api/CityInfo/SearchCity/' + this.searchKeyword)
-                    .then(response => response.json())
-                    .then(data => {
-                        this.setState({
-                            cityList: data.list,
-                        });
-                    });
-            } else if (this.searchKeyword.length > 0 &&
-                this.searchKeyword.length <= 3 && this.state.cityList.length > 0) {
-                this.setState(
-                    { cityList: [] }
-                );
-            } else if (this.searchKeyword.length == 0) {
-                if (this.shortCity) {
-                    this.setState(
-                        { cityList: this.shortCity }
-                    );
+    onInputChange(type, value) {
+        if (type === OWMInputTypes.GeoLocation) {
+            const cb = (success) => {
+                if (success) {
+                    //console.log(`get location success type=${type} value=${value}`);
+                    this.paramType = type;
+                    this.tempWeather = null; this.tempForecast = null;
+                    for (var i = 0; i < this.updateListeners.length; ++i) {
+                        this.updateListeners[i]({}, {});
+                    }
+                    this.updateAllData();
+                } else {
+                    console.log("auto-detect location failed")
                 }
+            };
+            this.getLocation(cb);
+        } else if (type === OWMInputTypes.CityId) {
+            this.paramType = type;
+            this.paramVal = value;
+            this.tempWeather = null; this.tempForecast = null;
+            for (var i = 0; i < this.updateListeners.length; ++i) {
+                this.updateListeners[i]({}, {});
             }
-            this.searchHandle = null;
-        }, this.searchTimeOutVal);
-    }
-
-    renderCityList() {
-        let custom = { margin: "5px" };
-        if (this.state.cityList.length < 1) {
-            let emptyMsg = "";
-            if (this.searchKeyword.length > 0 && this.searchKeyword.length <= 3) {
-                emptyMsg += "Type first 4 or more char to Search";
-            } else {
-                emptyMsg += "No city yet...";
-            }
-            return (
-                <div>
-                    <InputGroup>
-                        <Input
-                            style={custom}
-                            type="text"
-                            placeholder="Type first 4 or more char to Search"
-                            onChange={this.searchCity} />
-                    </InputGroup>
-                    <DropdownItem key={0}>{emptyMsg}</DropdownItem>
-                </div>);
-        } else {
-            return (
-                <div>
-                    <InputGroup>
-                        <Input
-                            style={custom}
-                            type="text"
-                            placeholder="Type first 4 or more char to Search"
-                            onChange={this.searchCity} />
-                    </InputGroup>
-                    {this.state.cityList.map(
-                        (city, i) => <DropdownItem id={city.id} key={city.id} onClick={this.onCitySelected}>
-                            {city.name}, {city.country}, ({city.lat.toFixed(2)},{city.lon.toFixed(2)})
-                        </DropdownItem>)}
-                </div>)
+            this.updateAllData();
         }
-    }
-
-    getLocationAndUpdate() {
-        this.tempWeather = null; this.tempForecast = null;
-        for (var i = 0; i < this.updateListeners.length; ++i) {
-            this.updateListeners[i]({}, {});
-        }
-        var cb = (success) => {
-            if (success) {
-                this.updateAllData();
-            }
-            else {
-                this.paramType = OWMInputTypes.CityId;
-                this.paramVal = this.state.cityList[0].id;
-                this.updateAllData();
-            }
-        };
-        this.getLocation(cb);
-    }
-
-    onCitySelected(evt) {
-        this.tempWeather = null; this.tempForecast = null;
-        for (var i = 0; i < this.updateListeners.length; ++i) {
-            this.updateListeners[i]({}, {});
-        }
-        this.paramType = OWMInputTypes.CityId;
-        this.paramVal = evt.currentTarget.id;
-        this.updateAllData();
     }
 
     render() {
@@ -190,22 +85,7 @@ export default class App extends Component {
                     <Row>
                         <Col md={3} />
                         <Col md={6}>
-                            <ButtonGroup className="inputBar">
-                                <ButtonDropdown
-                                    isOpen={this.state.isDropDownOpen}
-                                    toggle={this.toggleDropdown}>
-                                    <DropdownToggle
-                                        style={{ backgroundColor: "yellow", color: "black"}}
-                                        caret> Search and Select a City </DropdownToggle>
-                                    <DropdownMenu className="dropdownMenu">
-                                        {this.renderCityList()}
-                                    </DropdownMenu>
-                                </ButtonDropdown>
-                                <Button
-                                    style={{ backgroundColor: "darkcyan" }}
-                                    onClick={this.getLocationAndUpdate}>
-                                    Auto-detect</Button>
-                            </ButtonGroup>
+                            <InputBar inputCb={this.onInputChange}/>
                         </Col>
                         <Col md={3} />
                     </Row>
@@ -213,15 +93,11 @@ export default class App extends Component {
                         <Col md={3} />
                         <Col md={6}>
                             <CurrentWeather
-                                paramType={this.paramType}
-                                paramVal={this.paramVal}
                                 registerListener={this.registerListener} />
                         </Col>
                         <Col md={3} />
                     </Row>
                     <Forecast className="forecast_deck"
-                        paramType={this.paramType}
-                        paramVal={this.paramVal}
                         registerListener={this.registerListener} />
                 </Container>
             </div>

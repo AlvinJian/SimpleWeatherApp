@@ -6,17 +6,6 @@ body {
     height: 100%;
 }
 
-div.inputBar {
-    margin-top: 12px;
-    margin-bottom: 12px;
-}
-
 span.myBadge {
     margin: 4px;
-}
-
-div.dropdownMenu {
-    max-height: 560px;
-    min-width: 320px;
-    overflow-y: scroll;
 }
