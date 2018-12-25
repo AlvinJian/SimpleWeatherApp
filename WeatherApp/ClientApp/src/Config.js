@@ -27,6 +27,7 @@ export const IconMap = {
     "Fog": require("./icons/weather-fog-symbolic.svg"),
     "Haze": require("./icons/weather-fog-symbolic.svg"),
     "Rain": require("./icons/weather-showers-symbolic.svg"),
+    "Drizzle": require("./icons/weather-showers-symbolic.svg"),
     "Clouds": require("./icons/weather-overcast-symbolic.svg"),
     "Default": require("./icons/unknown-symbolic.svg"),
     "Storm": require("./icons/weather-storm-symbolic.svg")
