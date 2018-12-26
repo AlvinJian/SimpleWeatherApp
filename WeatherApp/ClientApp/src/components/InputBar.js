@@ -15,7 +15,7 @@ export default class InputBar extends Component {
         this.paramType = OWMInputTypes.CityId;
         this.paramVal = -1;
         this.searchHandle = null;
-        this.searchTimeOutVal = 1000;
+        this.searchTimeOutVal = 450;
         this.searchKeyword = "";
 
         // bind functions
