@@ -41,26 +41,16 @@ namespace WeatherApp
         {
             var cursor = collection.Find<BsonDocument>(filter).ToCursor();
             var list = new LinkedList<AppFront.CityList.City>();
-            foreach (var document in cursor.ToEnumerable())
+            foreach (var cityBson in cursor.ToEnumerable())
             {
-                using (var stringWriter = new StringWriter())
-                {
-                    using (var jsonWriter = new MongoDB.Bson.IO.JsonWriter(stringWriter))
-                    {
-                        var context = BsonSerializationContext.CreateRoot(jsonWriter);
-                        collection.DocumentSerializer.Serialize(context, document);
-                        var line = stringWriter.ToString();
-                        var cityBson = BsonDocument.Parse(line);
-                        var ct = new AppFront.CityList.City();
-                        ct.Id = cityBson.GetValue("id").AsInt32; // why I can't cast it to Int64?
-                        ct.Name = cityBson.GetValue("name").AsString;
-                        ct.Country = cityBson.GetValue("country").AsString;
-                        var coordDoc = cityBson.GetValue("coord").AsBsonDocument;
-                        ct.Lon = coordDoc.GetValue("lon").AsDouble;
-                        ct.Lat = coordDoc.GetValue("lat").AsDouble;
-                        list.AddLast(ct);
-                    }
-                }
+                var ct = new AppFront.CityList.City();
+                ct.Id = cityBson.GetValue("id").AsInt32; // why I can't cast it to Int64?
+                ct.Name = cityBson.GetValue("name").AsString;
+                ct.Country = cityBson.GetValue("country").AsString;
+                var coordDoc = cityBson.GetValue("coord").AsBsonDocument;
+                ct.Lon = coordDoc.GetValue("lon").AsDouble;
+                ct.Lat = coordDoc.GetValue("lat").AsDouble;
+                list.AddLast(ct);
             }
 
             return list.ToArray();
