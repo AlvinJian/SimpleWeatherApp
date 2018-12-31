@@ -44,14 +44,13 @@ export default class App extends Component {
 
     onInputChange(type, value) {
         if (type === OWMInputTypes.GeoLocation) {
+            for (var i = 0; i < this.updateListeners.length; ++i) {
+                this.updateListeners[i]({}, {});
+            }
             const cb = (success) => {
                 if (success) {
                     //console.log(`get location success type=${type} value=${value}`);
-                    this.paramType = type;
                     this.tempWeather = null; this.tempForecast = null;
-                    for (var i = 0; i < this.updateListeners.length; ++i) {
-                        this.updateListeners[i]({}, {});
-                    }
                     this.updateAllData();
                 } else {
                     console.log("auto-detect location failed")
