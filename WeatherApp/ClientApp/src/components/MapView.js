@@ -54,7 +54,7 @@ export default class MapView extends Component {
         if (!window.google) {
             var s = document.createElement('script');
             s.type = 'text/javascript';
-            s.src = `https://maps.google.com/maps/api/js?key=${GapiKey.Dev}`;
+            s.src = `https://maps.google.com/maps/api/js?key=${GapiKey.Deploy}`;
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
             // Below is important. 
