@@ -52,3 +52,13 @@ export const BackgroundImages = {
     "Clouds": require("./backgrounds/weather-overcast.jpg"),
     "Storm": require("./backgrounds/weather-storm.jpg")
 }
+
+/**
+ * TODO
+ * currently I use restriction (IP and domain name) to protect these keys.
+ * I have to figure out how to switch key on deployment
+ * */
+export const GapiKey = {
+    Dev: "AIzaSyDhfsJRh-d370hbBYZItcJVgB5oWFgmbxg",
+    Deploy: "AIzaSyCj3MjsM3Qzp9mrMbv3JOmYhKpU3Kmkbxk"
+}

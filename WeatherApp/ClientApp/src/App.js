@@ -22,20 +22,31 @@ export default class App extends Component {
         this.refreshIfNeed = this.refreshIfNeed.bind(this);
         this.registerListener = this.registerListener.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
+        this.setMapView = this.setMapView.bind(this);
 
         this.tempWeather = null;
         this.tempForecast = null;
+        this.map = null;
+    }
+
+    setMapView(m) {
+        this.map = m; 
     }
 
     getLocation(cb) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
-                const lat = position.coords.latitude.toFixed(2);
-                const lon = position.coords.longitude.toFixed(2);
+                const lat = position.coords.latitude;
+                const lat2 = lat.toFixed(4);
+                const lng = position.coords.longitude;
+                const lon2 = lng.toFixed(4);
                 this.paramType = OWMInputTypes.GeoLocation;
-                this.paramVal = "" + lat + "," + lon;
+                this.paramVal = "" + lat2 + "," + lon2;
                 if (cb) {
                     cb(true);
+                }
+                if (this.map) {
+                    this.map.setMarker(lat, lng);
                 }
             }, (err) => { if (cb) { cb(false) } });
         } else {
@@ -59,12 +70,15 @@ export default class App extends Component {
             };
             this.getLocation(cb);
         } else if (type === OWMInputTypes.CityId) {
+            const cityId = value.id;
+            //console.log("cityId=" + cityId);
             this.paramType = type;
-            this.paramVal = value;
+            this.paramVal = cityId;
             this.tempWeather = null; this.tempForecast = null;
             for (var i = 0; i < this.updateListeners.length; ++i) {
                 this.updateListeners[i]({}, {});
             }
+            this.map.setMarker(value.lat, value.lon);
             this.updateAllData();
         }
     }
@@ -93,9 +107,9 @@ export default class App extends Component {
                             <MapView
                                 id="myMap"
                                 options={{
-                                    center: { lat: 41.0082, lng: 28.9784 },
-                                    zoom: 8
-                                }}>
+                                    zoom: 7
+                                }}
+                                setMapView={this.setMapView}>
                             </MapView>
                         </Col>
                         <Col md={1} />

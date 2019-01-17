@@ -32,7 +32,7 @@ export default class InputBar extends Component {
             .then(data => {
                 // console.log(JSON.stringify(data));
                 this.paramType = OWMInputTypes.CityId;
-                this.paramVal = data.list[0].id;
+                this.paramVal = data.list[0];
                 this.setState({
                     cityList: data.list,
                 });
@@ -93,7 +93,7 @@ export default class InputBar extends Component {
                 return this.state.cityList.map(
                     (city, i) => {
                         return (<DropdownItem
-                            id={city.id} key={city.id} onClick={this.onCitySelected}>
+                            id={city.id} key={i} onClick={this.onCitySelected}>
                             {city.name}, {city.country},
                             ({city.lat.toFixed(2)},{city.lon.toFixed(2)})
                         </DropdownItem>);
@@ -137,7 +137,15 @@ export default class InputBar extends Component {
 
     onCitySelected(evt) {
         this.paramType = OWMInputTypes.CityId;
-        this.paramVal = evt.currentTarget.id;
+        // console.log("current: " + evt.currentTarget.id);
+        const theId = evt.currentTarget.id; // `${evt.currentTarget.id}`;
+        for (let j = 0; j < this.state.cityList.length; ++j) {
+            if (`${this.state.cityList[j].id}` === theId) {
+                this.paramVal = this.state.cityList[j];
+                break;
+            }
+            //console.log(this.state.cityList[j].id);
+        }
         this.props.inputCb(this.paramType, this.paramVal);
     }
 
