@@ -4,6 +4,7 @@ import { Container, Row, Col } from 'reactstrap';
 import CurrentWeather from './components/CurrentWeather';
 import Forecast from './components/Forecast';
 import InputBar from './components/InputBar';
+import MapView from './components/MapView'
 import { OWMInputTypes } from './Config';
 
 export default class App extends Component {
@@ -82,19 +83,22 @@ export default class App extends Component {
 
                 <Container>
                     <Row>
-                        <Col md={3} />
-                        <Col md={6}>
-                            <InputBar inputCb={this.onInputChange}/>
-                        </Col>
-                        <Col md={3} />
-                    </Row>
-                    <Row>
-                        <Col md={3} />
-                        <Col md={6}>
+                        <Col md={1} />
+                        <Col md={5}>
+                            <InputBar inputCb={this.onInputChange} />
                             <CurrentWeather
                                 registerListener={this.registerListener} />
                         </Col>
-                        <Col md={3} />
+                        <Col md={5}>
+                            <MapView
+                                id="myMap"
+                                options={{
+                                    center: { lat: 41.0082, lng: 28.9784 },
+                                    zoom: 8
+                                }}>
+                            </MapView>
+                        </Col>
+                        <Col md={1} />
                     </Row>
                     <Forecast className="forecast_deck"
                         registerListener={this.registerListener} />
