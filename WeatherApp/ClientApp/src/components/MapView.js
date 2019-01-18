@@ -14,7 +14,7 @@ export default class MapView extends Component {
         this.props.setMapView(this);
     }
 
-    setMarker(lati, lon) {
+    setMarker(lati, lon, title) {
         const myLatLng = { lat: lati, lng: lon };
         if (this.marker != null) {
             this.marker.setMap(null);
@@ -25,9 +25,11 @@ export default class MapView extends Component {
                 this.marker.setMap(null);
             }
             this.map.setCenter(myLatLng);
-            this.marker = this.doSetMarker(myLatLng);
+            this.marker = this.doSetMarker(myLatLng, title);
         } else {
-            this.pending = myLatLng;
+            this.pending = {
+                pos: myLatLng, name: title
+            };
         }
     }
 
@@ -35,17 +37,17 @@ export default class MapView extends Component {
         this.map = new window.google.maps.Map(
             document.getElementById(this.props.id),
             this.props.options);
-        this.doSetMarker = (latln) => {
+        this.doSetMarker = (latln, t) => {
             const marker = new window.google.maps.Marker({
                 position: latln,
                 map: this.map,
-                title: 'Current City'
+                title: t
             });
             return marker;
         }
         if (this.pending != null) {
-            this.map.setCenter(this.pending);
-            this.marker = this.doSetMarker(this.pending);
+            this.map.setCenter(this.pending.pos);
+            this.marker = this.doSetMarker(this.pending.pos, this.pending.name);
             this.pending = null;
         }
     }
@@ -53,10 +55,11 @@ export default class MapView extends Component {
     componentDidMount() {
         if (!window.google) {
             // firstly, try to get api key from backend
-            fetch("api/key/gmapjs").then((respone) => {
-                respone.text().then((text) => {
+            fetch("api/key/gmapjs")
+                .then((respone) => { return respone.text() })
+                .then((text) => {
                     // secondly, load google map script
-                    // console.log(text);
+                    console.log(text);
                     this.apikey = text;
                     var s = document.createElement('script');
                     s.type = 'text/javascript';
@@ -68,8 +71,7 @@ export default class MapView extends Component {
                     s.addEventListener('load', e => {
                         this.onScriptLoad()
                     })
-                })
-            });
+                });
         } else {
             this.onScriptLoad()
         }

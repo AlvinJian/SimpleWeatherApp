@@ -46,7 +46,7 @@ export default class App extends Component {
                     cb(true);
                 }
                 if (this.map) {
-                    this.map.setMarker(lat, lng);
+                    this.map.setMarker(lat, lng, "Current City");
                 }
             }, (err) => { if (cb) { cb(false) } });
         } else {
@@ -78,7 +78,8 @@ export default class App extends Component {
             for (let i = 0; i < this.updateListeners.length; ++i) {
                 this.updateListeners[i]({}, {});
             }
-            this.map.setMarker(value.lat, value.lon);
+            this.map.setMarker(value.lat, value.lon,
+                `${value.name} (${value.lat.toFixed(2)}, ${value.lon.toFixed(2)})`);
             this.updateAllData();
         }
     }
