@@ -11,7 +11,7 @@ namespace WeatherApp.Controllers
     {
         private CityModel model = null;
 
-        public CityInfoController(OWMHandler owmHandler, CityModel cityModel)
+        public CityInfoController(CityModel cityModel)
         {
             model = cityModel;
         }

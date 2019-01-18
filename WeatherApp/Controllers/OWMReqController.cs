@@ -9,15 +9,15 @@ namespace WeatherApp.Controllers
     {
         private OWMHandler handler = null;
 
-        public OWMReqController(OWMHandler owmHandler, CityModel cityModel)
+        public OWMReqController(OWMHandler owmHandler)
         {
             handler = owmHandler;
         }
 
         [HttpGet("WeatherByGeo/{param}")]
-        public AppFront.WeatherData GetWeatherByGeo(string param)
+        public AppFront.FrontData GetWeatherByGeo(string param)
         {
-            AppFront.WeatherData data = new AppFront.WeatherData();
+            AppFront.FrontData data = new AppFront.FrontData();
             string[] strs = param.Split(',');
             if (strs.Length < 2)
             {
@@ -45,10 +45,10 @@ namespace WeatherApp.Controllers
         }
 
         [HttpGet("WeatherById/{param}")]
-        public AppFront.WeatherData GetWeatherById(string param)
+        public AppFront.FrontData GetWeatherById(string param)
         {
             long id;
-            AppFront.WeatherData data = new AppFront.WeatherData();
+            AppFront.FrontData data = new AppFront.FrontData();
             if (!long.TryParse(param, out id))
             {
                 data.Code = AppFront.ReturnCode.BAD;

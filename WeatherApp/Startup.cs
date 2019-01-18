@@ -1,3 +1,4 @@
+using AppFront;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace WeatherApp
 {
@@ -36,18 +38,23 @@ namespace WeatherApp
 
             string OWMKey = "";
             string MongoURI = "";
+            var keysForFront = new Dictionary<string, string>();
 
             if (Environ.IsDevelopment())
             {
                 logger.LogDebug("OWMKey=" + Configuration["OWM_KEY"]);
                 logger.LogDebug("MongoURI=" + Configuration["MONGO_URI"]);
+                logger.LogDebug("GMAP_JS=" + Configuration["GMAP_JS"]);
                 OWMKey = Configuration["OWM_KEY"];
                 MongoURI = Configuration["MONGO_URI"];
+                keysForFront.Add(KeyField.GoogleMapJs, Configuration["GMAP_JS"]);
             }
             else if (Environ.IsProduction())
             {
                 OWMKey = System.Environment.GetEnvironmentVariable("OWM_KEY");
                 MongoURI = System.Environment.GetEnvironmentVariable("MONGO_URI");
+                keysForFront.Add(KeyField.GoogleMapJs, 
+                    System.Environment.GetEnvironmentVariable("GMAP_JS"));
             }
             else
             {
@@ -56,6 +63,7 @@ namespace WeatherApp
 
             services.AddSingleton<OWMHandler>(new OWMHandler(OWMKey));
             services.AddSingleton<CityModel>(new CityModel(MongoURI));
+            services.AddSingleton<IDictionary<string,string>>(new Dictionary<string,string>(keysForFront));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

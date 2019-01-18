@@ -10,7 +10,12 @@ namespace AppFront
         public const string GOOD = "GOOD";
     }
 
-    public struct WeatherData
+    public static class KeyField
+    {
+        public const string GoogleMapJs = "GMapJs";
+    }
+
+    public struct FrontData
     {
         public string City { get; set; }
         public string Country { get; set; }

@@ -56,7 +56,7 @@ export default class App extends Component {
 
     onInputChange(type, value) {
         if (type === OWMInputTypes.GeoLocation) {
-            for (var i = 0; i < this.updateListeners.length; ++i) {
+            for (let i = 0; i < this.updateListeners.length; ++i) {
                 this.updateListeners[i]({}, {});
             }
             const cb = (success) => {
@@ -75,7 +75,7 @@ export default class App extends Component {
             this.paramType = type;
             this.paramVal = cityId;
             this.tempWeather = null; this.tempForecast = null;
-            for (var i = 0; i < this.updateListeners.length; ++i) {
+            for (let i = 0; i < this.updateListeners.length; ++i) {
                 this.updateListeners[i]({}, {});
             }
             this.map.setMarker(value.lat, value.lon);
@@ -107,7 +107,7 @@ export default class App extends Component {
                             <MapView
                                 id="myMap"
                                 options={{
-                                    zoom: 7
+                                    zoom: 7.5
                                 }}
                                 setMapView={this.setMapView}>
                             </MapView>

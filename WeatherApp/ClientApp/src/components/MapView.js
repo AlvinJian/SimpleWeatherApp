@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import { GapiKey } from '../Config' 
 
 export default class MapView extends Component {
     constructor(props) {
@@ -7,6 +6,7 @@ export default class MapView extends Component {
         this.setMarker = this.setMarker.bind(this);
         this.onScriptLoad = this.onScriptLoad.bind(this)
 
+        this.apikey = "";
         this.marker = null;
         this.pending = null;
         this.doSetMarker = null;
@@ -52,16 +52,24 @@ export default class MapView extends Component {
 
     componentDidMount() {
         if (!window.google) {
-            var s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.src = `https://maps.google.com/maps/api/js?key=${GapiKey.Deploy}`;
-            var x = document.getElementsByTagName('script')[0];
-            x.parentNode.insertBefore(s, x);
-            // Below is important. 
-            //We cannot access google.maps until it's finished loading
-            s.addEventListener('load', e => {
-                this.onScriptLoad()
-            })
+            // firstly, try to get api key from backend
+            fetch("api/key/gmapjs").then((respone) => {
+                respone.text().then((text) => {
+                    // secondly, load google map script
+                    // console.log(text);
+                    this.apikey = text;
+                    var s = document.createElement('script');
+                    s.type = 'text/javascript';
+                    s.src = `https://maps.google.com/maps/api/js?key=${this.apikey}`;
+                    var x = document.getElementsByTagName('script')[0];
+                    x.parentNode.insertBefore(s, x);
+                    // Below is important. 
+                    //We cannot access google.maps until it's finished loading
+                    s.addEventListener('load', e => {
+                        this.onScriptLoad()
+                    })
+                })
+            });
         } else {
             this.onScriptLoad()
         }
